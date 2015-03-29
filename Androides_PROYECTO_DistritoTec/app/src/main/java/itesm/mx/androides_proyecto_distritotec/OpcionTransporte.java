@@ -2,6 +2,7 @@ package itesm.mx.androides_proyecto_distritotec;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +15,7 @@ import com.parse.ParseUser;
 /**
  * Created by Alejandro Valdes on 28-Mar-15.
  */
-public class OpcionTransporte extends Activity {
+public class OpcionTransporte extends ActionBarActivity {
 
     //Declaracion variables
     TextView tvUser;
@@ -37,10 +38,11 @@ public class OpcionTransporte extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+
         // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.expreso_circuito, menu);
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override
