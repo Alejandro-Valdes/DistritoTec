@@ -8,9 +8,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Alejandro Valdes on 28-Mar-15.
@@ -21,12 +26,28 @@ public class OpcionTransporte extends ActionBarActivity {
     TextView tvUser;
     String strUserName;
 
+    //Variables para lista extendible
+    HashMap<String, List<String>> hmOpcionesTransporte;
+    List<String> liOpciones;
+    ExpandableListView expList;
+    OpcionesTransporteAdapter adapter;
+
+
     //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.opciontransporte);
         tvUser = (TextView) findViewById(R.id.tvUserName);
+
+        //variables lista
+        expList = (ExpandableListView)findViewById(R.id.expList);
+        hmOpcionesTransporte = OpcionesTransporteProvider.getInfo();
+        liOpciones = new ArrayList<String>(hmOpcionesTransporte.keySet());
+        adapter = new OpcionesTransporteAdapter(this, hmOpcionesTransporte, liOpciones);
+        expList.setAdapter(adapter);
+
+
 
         //obten datos de usuario
         ParseUser currentUser = ParseUser.getCurrentUser();

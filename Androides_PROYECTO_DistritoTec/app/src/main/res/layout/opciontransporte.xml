@@ -23,7 +23,16 @@
         android:layout_toRightOf="@+id/tvWelcome"
     />
 
-    <Button
+    <ExpandableListView
+        android:id="@+id/expList"
+        android:layout_below="@+id/tvWelcome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:divider="#000"
+        android:dividerHeight="1dp"
+     />
+    <!--<Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Expreso Tec"
@@ -51,6 +60,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true" />-->
 
 </RelativeLayout>
