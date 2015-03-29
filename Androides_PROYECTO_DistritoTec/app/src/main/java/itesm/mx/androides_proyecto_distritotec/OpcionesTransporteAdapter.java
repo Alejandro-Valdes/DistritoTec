@@ -91,6 +91,6 @@ public class OpcionesTransporteAdapter extends BaseExpandableListAdapter{
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 }
