@@ -126,7 +126,7 @@ public class LoginSignupActivity extends ActionBarActivity {
                 strUsername = etUsername.getText().toString(); // Username
 
                 // Verifica que los campos no se dejen vacios
-                if(etUsername.equals("") || etPassword.equals("")){
+                if(strUsername.equals("") || strPassword.equals("")){
                     Toast.makeText(getApplicationContext(),
                             "Porfavor llena todos los campos",Toast.LENGTH_LONG).show();
                 } else {
