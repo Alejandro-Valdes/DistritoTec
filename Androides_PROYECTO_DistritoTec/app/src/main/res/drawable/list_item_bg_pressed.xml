@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!-- Gradiente: le pone color al item que se seleciona -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:startColor="#ff3c5aa1"
+        android:endColor="#ff3c5aa1"
+        android:angle="90" />
+</shape>

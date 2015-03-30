@@ -1,7 +1,14 @@
 package itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -22,11 +29,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import itesm.mx.androides_proyecto_distritotec.R;
+import itesm.mx.androides_proyecto_distritotec.SideBar.HomeFragment;
+import itesm.mx.androides_proyecto_distritotec.SideBar.NavDrawerItem;
+import itesm.mx.androides_proyecto_distritotec.SideBar.NavDrawerListAdapter;
+import itesm.mx.androides_proyecto_distritotec.SideBar.NotificacionesFragment;
 
-/**
- * Created by Alejandro Valdes on 28-Mar-15.
- */
-public class OpcionTransporte extends ActionBarActivity{
+public class OpcionTransporte extends ActionBarActivity {
 
     private static final String LOG_TAG = "";
     //Declaracion variables
@@ -48,7 +56,20 @@ public class OpcionTransporte extends ActionBarActivity{
     String strRouteName;
     RouteAdapter adaptadorRuta;
 
-    //
+    // ####################### VARIABLES SIDE BAR ################################ //
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    // nav drawer title
+    private CharSequence mDrawerTitle;
+
+    // used to store app title
+    private CharSequence mTitle;
+
+    // slide menu items
+    private String[] navMenuTitles;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +79,7 @@ public class OpcionTransporte extends ActionBarActivity{
         tvWelcome = (TextView) findViewById(R.id.tvWelcome);
 
         //variables lista expandible
-        expList = (ExpandableListView)findViewById(R.id.expList);
+        expList = (ExpandableListView) findViewById(R.id.expList);
         hmOpcionesTransporte = OpcionesTransporteProvider.getInfo();
         liOpciones = new ArrayList<String>(hmOpcionesTransporte.keySet());
         adapter = new OpcionesTransporteAdapter(this, hmOpcionesTransporte, liOpciones);
@@ -72,13 +93,11 @@ public class OpcionTransporte extends ActionBarActivity{
 
 
         String strGretting = "Good ";
-        if(intHora <= 12){
+        if (intHora <= 12) {
             strGretting += "morning";
-        }
-        else if(intHora < 20){
+        } else if (intHora < 20) {
             strGretting += "afternoon";
-        }
-        else{
+        } else {
             strGretting += "night";
         }
         tvWelcome.setText(strGretting);
@@ -96,7 +115,7 @@ public class OpcionTransporte extends ActionBarActivity{
         expList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if(ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD){
+                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
                     int iGroupPosition = ExpandableListView.getPackedPositionGroup(id);
                     int iChildPosition = ExpandableListView.getPackedPositionChild(id);
 
@@ -108,29 +127,84 @@ public class OpcionTransporte extends ActionBarActivity{
             }
         });
 
-        //onLongClic para quitar lista favoritos
-        /*lvFavs.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String text = ((TextView)view).getText().toString();
-                removeFavRoute(view, text);
-                updateDB();
-                return false;
-            }
-        });*/
 
         //obten datos de usuario
         ParseUser currentUser = ParseUser.getCurrentUser();
-        strUserName = currentUser.getUsername().toString();
+        tvUser.setText(currentUser.getUsername().toString());
 
-        tvUser.setText(strUserName);
+
+        // ####################### SIDE BAR MENU ################################ //
+
+        // Titulo del Item
+        mTitle = mDrawerTitle = getTitle();
+
+        // Items del Side Bar
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+
+        // Iconos de los items del Side Bar
+        TypedArray navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);
+
+        // Views
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+
+        ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<NavDrawerItem>();
+
+        // Aqui se agregan los items del Side Bar
+        // Notificaciones
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1), true, "2"));
+        // Informacion
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+        // Configuracion
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+
+
+        // Recicla el arreglo
+        navMenuIcons.recycle();
+
+        // Se le pone el adaptador al NavDrawer
+        NavDrawerListAdapter adapterSideBar = new NavDrawerListAdapter(getApplicationContext(),
+                navDrawerItems);
+        mDrawerList.setAdapter(adapterSideBar);
+
+        // Habilita los iconos y les da la propiedad de Boton
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        // Checa como funciona este toolbar!!
+        Toolbar toolbar = new Toolbar(this);
+        toolbar.setLogo(R.drawable.ic_action_expand);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                toolbar, //nav menu toggle icon
+                R.string.app_name, // nav drawer open - description for accessibility
+                R.string.app_name // nav drawer close - description for accessibility
+        ){
+            // Cuando se cierra el Side Bar
+            public void onDrawerClosed(View view) {
+                getSupportActionBar().setTitle(mTitle);
+                invalidateOptionsMenu();
+            }
+
+            // Cuando se abre el Side Bar
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        // Click listener de la lista de Items
+        mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
 
+        // Checa si este menu inflater jala como deberia
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
 
         if(v.getId() == R.id.lvFavs){
             Log.i(LOG_TAG,"Entered the favRutas");
@@ -166,20 +240,113 @@ public class OpcionTransporte extends ActionBarActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.expreso_circuito, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle action bar actions click                           SI NO JALAN LOS BOTONES CHECA ESTO
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        /*
+        int id = item.getItemId();
         if (id == R.id.Logout) {
             ParseUser.logOut();
             finish();
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);*/
+    }
+
+    /***
+     * Called when invalidateOptionsMenu() is triggered
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // if nav drawer is opened, hide the action items
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    /**
+     * Slide menu item click listener
+     * */
+    private class SlideMenuClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // Despliega la actividad conforme a la posicion
+            displayView(position);
+        }
+    }
+
+    /**
+     * Diplaying fragment view for selected nav drawer list item
+     * */
+    private void displayView(int position) {
+        // update the main content by replacing fragments
+        Fragment fragment = null;
+        switch (position) {
+            case 0:
+                fragment = new NotificacionesFragment();
+                getSupportActionBar().setTitle("Notificaciones");
+                break;
+            case 1:
+                fragment = new HomeFragment();
+                getSupportActionBar().setTitle("Configuracion");
+                break;
+            case 2:
+                fragment = new HomeFragment();
+                getSupportActionBar().setTitle("Informacion");
+                break;
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame_container, fragment).commit();
+
+            // update selected item and title, then close the drawer
+            mDrawerList.setItemChecked(position, true);
+            mDrawerList.setSelection(position);
+            setTitle(navMenuTitles[position]);
+            mDrawerLayout.closeDrawer(mDrawerList);
+        } else {
+            // error in creating fragment
+            Log.e("MainActivity", "Error in creating fragment");
+        }
     }
 
     public void removeFavRoute (View view, String strRouteName){
