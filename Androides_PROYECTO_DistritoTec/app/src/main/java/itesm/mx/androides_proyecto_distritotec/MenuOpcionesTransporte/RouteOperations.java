@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -81,9 +82,31 @@ public class RouteOperations {
 
     }
 
+    public List<String> getAllRoutesStr(){
+
+        List<String> liRoutes = new ArrayList<String>();
+
+        String selectQuery = "SELECT * FROM "+ TABLE_ROUTE;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor.moveToFirst()){
+            do
+            {
+                Route route = new Route(Integer.parseInt(cursor.getString(0)),
+                        cursor.getString(1));
+
+                liRoutes.add(route.getName());
+            } while (cursor.moveToNext());
+        }
 
 
+        if(liRoutes == null){
+            liRoutes.add("Empty");
+        }
+        cursor.close();
+        return liRoutes;
 
-
+    }
 
 }

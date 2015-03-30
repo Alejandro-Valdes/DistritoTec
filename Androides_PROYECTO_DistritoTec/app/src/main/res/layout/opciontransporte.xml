@@ -29,34 +29,14 @@
         android:layout_toRightOf="@+id/tvWelcome"
     />
 
-    <TextView
-        android:id="@+id/tvFavs"
-        android:layout_below="@+id/tvWelcome"
-        android:text="@string/strFavs"
-        android:layout_marginTop="8dp"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#0a5988"
-        android:textColor="#fff"
-        android:textStyle="bold"/>
-
-    <ListView
-        android:id="@+id/lvFavs"
-        android:layout_marginTop="5dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/tvFavs"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"/>
-
     <ExpandableListView
         android:id="@+id/expList"
-        android:layout_below="@+id/lvFavs"
+        android:layout_below="@+id/tvWelcome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
-        android:divider="#000"
-        android:dividerHeight="1dp"/>
+        android:divider="#fff"
+        android:dividerHeight="2dp"/>
 </RelativeLayout>
 
     <!-- Framelayout to display Fragments -->
