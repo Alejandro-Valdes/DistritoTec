@@ -12,13 +12,31 @@ import java.util.List;
 import itesm.mx.androides_proyecto_distritotec.R;
 
 /**
- * Created by Alejandro Valdes on 29-Mar-15.
+ * RouteAdapter
+ *
+ * Clase adaptador de las rutas, obtiene los elementos de la ListView
+ *
+ * @author Jose Eduardo Elizondo Lozano A01089591
+ * @author Oliver Alejandro Martínez Quiroz A01280416
+ * @author Jesús Alejandro Valdés Valdés A0099044
+ *
+ * Version 1.0
+ *
  */
 public class RouteAdapter extends ArrayAdapter<Route>{
-    private Context context;
-    int iResourceID;
-    List<Route> liRoutes;
+    private Context context; // Contexto de la aplicacion
+    int iResourceID; // Id del recurso
+    List<Route> liRoutes; // Lista de las rutas
 
+    /**
+     * RouteAdapter
+     *
+     * Metodo constructor que crea un adaptador tipo RouteAdapter
+     *
+     * @param context
+     * @param iResourceID
+     * @param liRoutes
+     */
     public RouteAdapter(Context context, int iResourceID, List<Route> liRoutes) {
         super(context, iResourceID, liRoutes);
         this.context = context;
@@ -26,26 +44,32 @@ public class RouteAdapter extends ArrayAdapter<Route>{
         this.liRoutes = liRoutes;
     }
 
+    /**
+     * getView
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return un valor <code>View</code>
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
 
-        //convertView --> vista a resura si es nulo se crea
+        // Si la lista esta vacia le pone la informacion pasada como parametros
         if(row == null){
             LayoutInflater inflater =
                     (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(iResourceID, parent, false);
         }
 
-        //obtiene las variables del layout del renglon
+        // Obtiene las variables del layout del renglon
         TextView tvRouteName = (TextView)row.findViewById(R.id.tvRow);
 
-
-        //obtiene el elemento de la lista de rutas
+        // Obtiene el elemento de la lista de rutas
         Route route = liRoutes.get(position);
 
+        // Asigna la ruta al TextView
         tvRouteName.setText(route.getName());
         return row;
     }
-
-
 }
