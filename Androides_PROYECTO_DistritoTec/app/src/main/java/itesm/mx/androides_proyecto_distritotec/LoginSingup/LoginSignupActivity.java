@@ -7,103 +7,161 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
-
 import itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte.OpcionTransporte;
 import itesm.mx.androides_proyecto_distritotec.R;
 
-/**
- * Created by Alejandro Valdes on 28-Mar-15.
+/*
+ * LoginSingupActivity
+ *
+ * Clase que se encarga de manejar la informacion de login para poder acceder a la aplicacion
+ *
+ * @author Jose Eduardo Elizondo Lozano A01089591
+ * @author Oliver Alejandro Martínez Quiroz A01280416
+ * @author Jesús Alejandro Valdés Valdés A0099044
+ *
+ * Version 1.0
+ *
  */
+
 public class LoginSignupActivity extends ActionBarActivity {
-    //Deblaracion de variables
-    Button btnLogin;
-    Button btnSignup;
-    EditText etPassword;
-    EditText etUsername;
 
-    String strUsername;
-    String strPassword;
+    Button btnLogin; // Boton Login
+    Button btnSignup; // Boton Singup
+    EditText etPassword; // EditText Password
+    EditText etUsername; // EditText Username
+    String strUsername; // String que guarda el nombre del usuario
+    String strPassword; // String que guarda la contraseña del usuario
 
-    //al abrir la activity
+    /*
+     * onCreate
+     *
+     * Metodo encargado de crear la actividad de LoginSingup
+     *
+     * @Param savedInstanceState de tipo <code>Bundle</code> se encarga de guardar la informacion
+     * de la actividad LoginSingup.
+     * @return void
+     */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.loginsignup);
+        setContentView(R.layout.loginsignup); // Se le asgina el layout a la actividad
 
-        //inicializacion variables
-        btnLogin = (Button)findViewById(R.id.btnLogin);
-        btnSignup = (Button)findViewById(R.id.btnSignup);
-        etUsername = (EditText)findViewById(R.id.etUserName);
-        etPassword = (EditText)findViewById(R.id.etPassword);
+        /* Se asignan los views a su variable correspontiendte */
+        btnLogin = (Button)findViewById(R.id.btnLogin); // Boton Login
+        btnSignup = (Button)findViewById(R.id.btnSignup); // Boton Singup
+        etUsername = (EditText)findViewById(R.id.etUserName); // EditText UserName
+        etPassword = (EditText)findViewById(R.id.etPassword); // EditText Password
 
-        getSupportActionBar().hide();
+        getSupportActionBar().hide(); // Esconde el SupportActionBar
 
-        //onClickListeners para los botones
+        // Metodo on ClickListener para el Boton Login
         btnLogin.setOnClickListener(new View.OnClickListener() {
+            /*
+             * onClick
+             *
+             * Metodo que verifica si el usuario hace click en el boton Login
+             *
+             * @Param v de tipo <code>View</code> recibe el view donde se realizo el click
+             * @return void
+             */
             @Override
             public void onClick(View v) {
+                // El input del usuario de pasa a las variables correspontientes
+                strPassword = etPassword.getText().toString(); // UserName
+                strUsername = etUsername.getText().toString(); // Password
 
-                strPassword = etPassword.getText().toString();
-                strUsername = etUsername.getText().toString();
-
-                //verificar datos con parse
+                // Metodo logInInBackground para verificar los datos de ParseUser
                 ParseUser.logInInBackground(strUsername, strPassword,
+                        // LLamada LogInCallback
                         new LogInCallback() {
+
+                            /*
+                             * done
+                             *
+                             * Metodo que verifica si los datos de usuario son correctos y en caso
+                             * de serlo lo deja accesar a la actividad OpcionTransporte de lo
+                             * contrario le pedira que cheque su informacion o que se registre.
+                             *
+                             * @Param parseUser de tipo <code>ParseUser</code> guarda la informaicon
+                             * del usuario
+                             * @Param e de tipo <code>ParseException</code> no se usa
+                             * @return void
+                             */
                             @Override
                             public void done(ParseUser parseUser, ParseException e) {
                                 if(parseUser != null){
                                     Intent intent = new Intent(LoginSignupActivity.this,
                                             OpcionTransporte.class);
-                                    startActivity(intent);
+                                    startActivity(intent); // Llama a la actividad OpcionTransporte
 
-                                    Toast.makeText(getApplicationContext(),"Logged in",
+                                    Toast.makeText(getApplicationContext(),"Conectado",
                                             Toast.LENGTH_SHORT).show();
-                                    finish();
+                                    finish(); // Termina la actividad
                                 } else {
-                                    Toast.makeText(getApplicationContext(),"Check your credentials,"
-                                                    +" or sign up", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(),"Verifica tu informacion,"
+                                                    +" o registrate", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             }
         });
 
+        // Metodo on ClickListener para el Boton Singup
         btnSignup.setOnClickListener(new View.OnClickListener() {
+            /*
+             * onClick
+             *
+             * Metodo que verifica si el usuario hace click en el boton Singup
+             *
+             * @Param v de tipo <code>View</code> recibe el view donde se realizo el click
+             * @return void
+             */
             @Override
             public void onClick(View v) {
-                strPassword = etPassword.getText().toString();
-                strUsername = etUsername.getText().toString();
+                // El input del usuario de pasa a las variables correspontientes
+                strPassword = etPassword.getText().toString(); // Password
+                strUsername = etUsername.getText().toString(); // Username
 
-                //deteccion de error, tiene que llenar
+                // Verifica que los campos no se dejen vacios
                 if(etUsername.equals("") || etPassword.equals("")){
                     Toast.makeText(getApplicationContext(),
-                            "Please fill in all the fields",Toast.LENGTH_LONG).show();
+                            "Porfavor llena todos los campos",Toast.LENGTH_LONG).show();
                 } else {
-                    //saves the data into parse
+                    // Se crea un nuevo usuario y se guarda su informacion
                     ParseUser user = new ParseUser();
-                    user.setUsername(strUsername);
-                    user.setPassword(strPassword);
+                    user.setUsername(strUsername); // UserName
+                    user.setPassword(strPassword); // Password
 
-                    //signup al usuario nuevo
+                    /* Conecta al ausuario a la aplicacion mientras despliega un mensaje de exito
+                     * o de error
+                     */
                     user.signUpInBackground(new SignUpCallback() {
+
+                        /*
+                         * done
+                         *
+                         * Metodo que verifica si hubo error a la hora de crear el usuario
+                         *
+                         * @Param e de tipo <code>ParseException</code> si no hay exception marca
+                         * registro exitoso de lo contrario marca error.
+                         * @return void
+                         */
                         @Override
                         public void done(ParseException e) {
                             if(e == null){
-                                Toast.makeText(getApplicationContext(),"You can now login",
+                                Toast.makeText(getApplicationContext(),"Registro exitoso!",
                                         Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(getApplicationContext(),"There was an error, " +
-                                        "please try again", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Hubo un error, " +
+                                        "intenta de nuevo", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
                 }
             }
         });
-
     }
 }
