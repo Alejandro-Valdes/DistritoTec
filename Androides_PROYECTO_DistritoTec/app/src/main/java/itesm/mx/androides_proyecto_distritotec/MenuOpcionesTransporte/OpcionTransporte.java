@@ -2,13 +2,14 @@ package itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import itesm.mx.androides_proyecto_distritotec.R;
  */
 public class OpcionTransporte extends ActionBarActivity{
 
+    private static final String LOG_TAG = "";
     //Declaracion variables
     TextView tvUser;
     TextView tvWelcome;
@@ -55,32 +57,31 @@ public class OpcionTransporte extends ActionBarActivity{
         tvUser = (TextView) findViewById(R.id.tvUserName);
         tvWelcome = (TextView) findViewById(R.id.tvWelcome);
 
-        String strGretting = "Good ";
-
-        if(intHora <= 12){
-            strGretting += "morning";
-        }
-
-        else if(intHora <= 20){
-            strGretting += "afternoon";
-        }
-
-        else{
-            strGretting += "night";
-        }
-
-        tvWelcome.setText(strGretting);
-
         //variables lista expandible
         expList = (ExpandableListView)findViewById(R.id.expList);
         hmOpcionesTransporte = OpcionesTransporteProvider.getInfo();
         liOpciones = new ArrayList<String>(hmOpcionesTransporte.keySet());
         adapter = new OpcionesTransporteAdapter(this, hmOpcionesTransporte, liOpciones);
         expList.setAdapter(adapter);
+        registerForContextMenu(expList);
 
         //variables lista fav
         lvFavs = (ListView) findViewById(R.id.lvFavs);
         liRoutes = new ArrayList<Route>();
+        registerForContextMenu(lvFavs);
+
+
+        String strGretting = "Good ";
+        if(intHora <= 12){
+            strGretting += "morning";
+        }
+        else if(intHora < 20){
+            strGretting += "afternoon";
+        }
+        else{
+            strGretting += "night";
+        }
+        tvWelcome.setText(strGretting);
 
 
         expList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -108,7 +109,7 @@ public class OpcionTransporte extends ActionBarActivity{
         });
 
         //onLongClic para quitar lista favoritos
-        lvFavs.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+        /*lvFavs.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -117,7 +118,7 @@ public class OpcionTransporte extends ActionBarActivity{
                 updateDB();
                 return false;
             }
-        });
+        });*/
 
         //obten datos de usuario
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -126,6 +127,41 @@ public class OpcionTransporte extends ActionBarActivity{
         tvUser.setText(strUserName);
 
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+
+
+        if(v.getId() == R.id.lvFavs){
+            Log.i(LOG_TAG,"Entered the favRutas");
+            getMenuInflater().inflate(R.menu.menu_context_rutasfav, menu);
+        }
+
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        int id = item.getItemId();
+
+        if(id == R.id.addFav) {
+            return true;
+        }
+
+        else if(id == R.id.removeFav) {
+            Route text = liRoutes.get(info.position);
+            Log.i(LOG_TAG,""+text);
+            removeFavRoute(info.targetView, text.getName());
+            updateDB();
+            return true;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -18,5 +18,9 @@
     <string name="exit">Exit</string>
     <string name="strFavs">Favourite routes</string>
 
+    //strings menus context
+    <string name="strAdd">Add to favourites</string>
+    <string name="strRemove">Remove from favourites</string>
+
 
 </resources>
