@@ -1,4 +1,4 @@
-package itesm.mx.androides_proyecto_distritotec;
+package itesm.mx.androides_proyecto_distritotec.ParseApplication;
 
 /**
  * Created by Alejandro Valdes on 28-Mar-15.

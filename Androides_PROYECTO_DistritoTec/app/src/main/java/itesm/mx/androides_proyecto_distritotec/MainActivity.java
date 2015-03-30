@@ -1,8 +1,6 @@
 package itesm.mx.androides_proyecto_distritotec;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.app.Activity;
 import android.content.Intent;
 
@@ -10,6 +8,9 @@ import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
+
+import itesm.mx.androides_proyecto_distritotec.LoginSingup.LoginSignupActivity;
+import itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte.OpcionTransporte;
 
 
 public class MainActivity extends Activity {

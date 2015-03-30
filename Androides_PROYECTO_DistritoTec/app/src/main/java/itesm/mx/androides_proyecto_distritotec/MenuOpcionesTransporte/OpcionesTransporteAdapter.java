@@ -1,4 +1,4 @@
-package itesm.mx.androides_proyecto_distritotec;
+package itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
+
+import itesm.mx.androides_proyecto_distritotec.R;
 
 /**
  * Created by Alejandro Valdes on 28-Mar-15.

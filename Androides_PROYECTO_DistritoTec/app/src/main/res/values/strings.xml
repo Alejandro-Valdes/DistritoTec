@@ -6,7 +6,6 @@
     <string name="action_settings">Settings</string>
 
     //Strings loginsignup
-
     <string name="strUsername">Username</string>
     <string name="strPassword">Password</string>
     <string name="strLoginBtn">Login</string>

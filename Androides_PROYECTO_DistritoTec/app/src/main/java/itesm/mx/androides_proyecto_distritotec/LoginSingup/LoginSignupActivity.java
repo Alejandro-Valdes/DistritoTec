@@ -1,13 +1,8 @@
-package itesm.mx.androides_proyecto_distritotec;
+package itesm.mx.androides_proyecto_distritotec.LoginSingup;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +12,9 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte.OpcionTransporte;
+import itesm.mx.androides_proyecto_distritotec.R;
 
 /**
  * Created by Alejandro Valdes on 28-Mar-15.

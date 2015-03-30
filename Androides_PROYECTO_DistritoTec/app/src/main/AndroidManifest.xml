@@ -21,8 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginSignupActivity"></activity>
-        <activity android:name=".OpcionTransporte"></activity>
+        <activity android:name=".LoginSingup.LoginSignupActivity"></activity>
+        <activity android:name=".MenuOpcionesTransporte.OpcionTransporte"></activity>
     </application>
 
 </manifest>
