@@ -14,7 +14,7 @@ import com.parse.SignUpCallback;
 import itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte.OpcionTransporte;
 import itesm.mx.androides_proyecto_distritotec.R;
 
-/*
+/**
  * LoginSingupActivity
  *
  * Clase que se encarga de manejar la informacion de login para poder acceder a la aplicacion
@@ -36,7 +36,7 @@ public class LoginSignupActivity extends ActionBarActivity {
     String strUsername; // String que guarda el nombre del usuario
     String strPassword; // String que guarda la contraseña del usuario
 
-    /*
+    /**
      * onCreate
      *
      * Metodo encargado de crear la actividad de LoginSingup
@@ -59,7 +59,7 @@ public class LoginSignupActivity extends ActionBarActivity {
 
         // Metodo on ClickListener para el Boton Login
         btnLogin.setOnClickListener(new View.OnClickListener() {
-            /*
+            /**
              * onClick
              *
              * Metodo que verifica si el usuario hace click en el boton Login
@@ -78,7 +78,7 @@ public class LoginSignupActivity extends ActionBarActivity {
                         // LLamada LogInCallback
                         new LogInCallback() {
 
-                            /*
+                            /**
                              * done
                              *
                              * Metodo que verifica si los datos de usuario son correctos y en caso
@@ -111,7 +111,7 @@ public class LoginSignupActivity extends ActionBarActivity {
 
         // Metodo on ClickListener para el Boton Singup
         btnSignup.setOnClickListener(new View.OnClickListener() {
-            /*
+            /**
              * onClick
              *
              * Metodo que verifica si el usuario hace click en el boton Singup
@@ -140,7 +140,7 @@ public class LoginSignupActivity extends ActionBarActivity {
                      */
                     user.signUpInBackground(new SignUpCallback() {
 
-                        /*
+                        /**
                          * done
                          *
                          * Metodo que verifica si hubo error a la hora de crear el usuario
