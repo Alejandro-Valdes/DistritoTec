@@ -4,6 +4,14 @@
     android:layout_height="match_parent">
 
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iconoIV"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/iconodistrito"/>
+
     <EditText
         android:id="@+id/etUserName"
         android:layout_width="fill_parent"
@@ -11,7 +19,7 @@
         android:layout_below="@+id/tvUserName"
         android:inputType="text"
         android:hint="Username"
-        android:layout_marginTop="255dp"/>
+        android:layout_marginTop="50dp"/>
 
     <EditText
         android:id="@+id/etPassword"
