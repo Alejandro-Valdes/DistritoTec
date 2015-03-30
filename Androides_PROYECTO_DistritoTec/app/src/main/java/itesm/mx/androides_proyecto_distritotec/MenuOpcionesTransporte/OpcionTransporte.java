@@ -233,7 +233,7 @@ public class OpcionTransporte extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.expreso_circuito, menu);
         return true;
     }
 
@@ -268,7 +268,7 @@ public class OpcionTransporte extends ActionBarActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if nav drawer is opened, hide the action items
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        menu.findItem(R.id.Logout).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 

@@ -3,7 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <!-- Este setting hay que quitarlo busca porque crashea si lo quitas -->
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item
+        android:id="@+id/Logout"
+        android:title="@string/logout"
+        app:showAsAction="never"
+        android:orderInCategory="100"/>
+
 
 </menu>

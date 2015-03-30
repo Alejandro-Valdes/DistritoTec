@@ -36,7 +36,7 @@ public class LoginSignupActivity extends ActionBarActivity {
     String strUsername; // String que guarda el nombre del usuario
     String strPassword; // String que guarda la contraseña del usuario
 
-    /*
+    /**
      * onCreate
      *
      * Metodo encargado de crear la actividad de LoginSingup
@@ -111,7 +111,7 @@ public class LoginSignupActivity extends ActionBarActivity {
 
         // Metodo on ClickListener para el Boton Singup
         btnSignup.setOnClickListener(new View.OnClickListener() {
-            /*
+            /**
              * onClick
              *
              * Metodo que verifica si el usuario hace click en el boton Singup
