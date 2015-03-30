@@ -12,15 +12,25 @@ import com.parse.ParseUser;
 import itesm.mx.androides_proyecto_distritotec.LoginSingup.LoginSignupActivity;
 import itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte.OpcionTransporte;
 
-
+/**
+ * MainActivity
+ *
+ * Clase
+ *
+ * @author Jose Eduardo Elizondo Lozano A01089591
+ * @author Oliver Alejandro Martínez Quiroz A01280416
+ * @author Jesús Alejandro Valdés Valdés A0099044
+ *
+ * Version 1.0
+ *
+ */
 public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        //codigos de inicializacion
+        // Codigo de inicializacion
         Parse.initialize(this, "Pc66LZ9sLsdgr10KSJPD1qTwO74Ov6NWvDOTcYJb",
                 "huXDJ9jUWe0zP1dDOFMCByyUAZ5RflNR9mN1pGly");
 
@@ -30,18 +40,20 @@ public class MainActivity extends Activity {
         defaultACL.setPublicReadAccess(true);
         ParseACL.setDefaultACL(defaultACL, true);
 
-        //Determicar si el usuario es anonimo
+        // Determina si el usuario es anondimo
         if(ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())){
-            //si es anonimo, lo mandamos a la actividad LoginSignUP
+
+            // Si es anonimo, lo mandamos a la actividad LoginSignUP
             Intent intent = new Intent(MainActivity.this, LoginSignupActivity.class);
             startActivity(intent);
             finish();
         } else {
-            //Si el usuario no es un usuario anonimo
-            //hacemos un get de los datos del usuario
+
+            // Si el usuario no es un usuario anonimo hacemos un get de los datos del usuario
             ParseUser currentUser = ParseUser.getCurrentUser();
             if(currentUser != null) {
-                //Enviamos al usuario que no es anonimo a OpcionTransporte
+
+                // Enviamos al usuario que no es anonimo a OpcionTransporte
                 Intent intent = new Intent(MainActivity.this, OpcionTransporte.class);
                 startActivity(intent);
                 finish();
