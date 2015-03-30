@@ -16,6 +16,7 @@
     <string name="strLogoutBtn">Log Out</string>
     <string name="logout">Logout</string>
     <string name="exit">Exit</string>
+    <string name="strFavs">Favourite routes</string>
 
 
 </resources>
