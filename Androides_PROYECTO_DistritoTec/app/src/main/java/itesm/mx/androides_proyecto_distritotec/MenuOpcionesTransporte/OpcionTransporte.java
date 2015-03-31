@@ -2,6 +2,7 @@ package itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,48 +29,63 @@ import java.util.HashMap;
 import java.util.List;
 
 import itesm.mx.androides_proyecto_distritotec.R;
-import itesm.mx.androides_proyecto_distritotec.SideBar.HomeFragment;
 import itesm.mx.androides_proyecto_distritotec.SideBar.NavDrawerItem;
 import itesm.mx.androides_proyecto_distritotec.SideBar.NavDrawerListAdapter;
 import itesm.mx.androides_proyecto_distritotec.SideBar.NotificacionesFragment;
+import itesm.mx.androides_proyecto_distritotec.SideBar.SideBarConfiguracion;
 
+/**
+ * Route
+ *
+ * Clase que provee la informacion de las rutas para la base de datos
+ *
+ * @author Jose Eduardo Elizondo Lozano A01089591
+ * @author Oliver Alejandro Martínez Quiroz A01280416
+ * @author Jesús Alejandro Valdés Valdés A0099044
+ *
+ * Version 1.0
+ *
+ */
 public class OpcionTransporte extends ActionBarActivity {
 
-    // ####################### LOG_TAG ################################ //
-    //Por si queremos debuggear
-    private static final String LOG_TAG = "";
+    /**
+     * Layouts
+     */
+    TextView tvUser; // Nombre del usuario
+    TextView tvWelcome; // Bienvenida
 
-    // ####################### VARIABLES MENU PRINCIPAL ################################ //
-    TextView tvUser;    //nombre usuario
-    TextView tvWelcome;     //bienvenica
-    int intHora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);     //saber como bienvenir
+    /**
+     * Lista Expandible
+     */
+    HashMap<String, List<String>> hmOpcionesTransporte;     // HashMap <nombre, List>
+    List<String> liOpciones; // Opciones Padre: Expreso, Circuito
+    ExpandableListView expList; // Lista expandible
+    OpcionesTransporteAdapter adapter; // Adaptador para los items de la lista expandible
 
-    // ####################### VARIABLES LISTA EXPANDIBLE ################################ //
-    HashMap<String, List<String>> hmOpcionesTransporte;     //hash map nombre, lista
-    List<String> liOpciones;        //seran las opciones padre
-    ExpandableListView expList;     //expandable list view
-    OpcionesTransporteAdapter adapter;      //adaptador para items de expnadable view
+    /**
+     * Rutas favoritas
+     */
+    List<Route> liRoutes; // Lista de rutas
+    List<String> liRoutesStr; // Lista de nombres de cada ruta
+    RouteOperations dao = new RouteOperations(this); // Route operation
+    String strRouteName; // Nombre de la ruta
 
-    // ####################### VARIABLES RUTAS FAV ################################ //
-    List<Route> liRoutes;   //lista de rutas como rutas
-    List<String> liRoutesStr;   //lista de nombres de rutas
-    RouteOperations dao = new RouteOperations(this);        //variable de operaciones de ruta
-    String strRouteName;        //nombre de la ruta
-    //RouteAdapter adaptadorRuta; se usaba con listView podemos borrar clase
+    /**
+     * Side Bar
+     */
+    private DrawerLayout mDrawerLayout; // Layout
+    private ListView mDrawerList; // Lista
+    private ActionBarDrawerToggle mDrawerToggle; // Suport Action Bar
+    private CharSequence mDrawerTitle; // Titulo del nav bar
+    private CharSequence mTitle; // Titulo de la app
+    private String[] navMenuTitles; // Items del menu
 
-    // ####################### VARIABLES SIDE BAR ################################ //
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
+    /**
+     * Otros
+     */
+    private static final String LOG_TAG = ""; // LOG_TAG
+    int intHora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY); // Hora del dia
 
-    // nav drawer title
-    private CharSequence mDrawerTitle;
-
-    // used to store app title
-    private CharSequence mTitle;
-
-    // slide menu items
-    private String[] navMenuTitles;
 
     /**
      * Metodo onCreate que entra cada que se crea la aplicacion
@@ -81,18 +96,12 @@ public class OpcionTransporte extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.opciontransporte);
 
-        //Busco las variables de bienvenida
-        tvUser = (TextView) findViewById(R.id.tvUserName);
-        tvWelcome = (TextView) findViewById(R.id.tvWelcome);
+        tvUser = (TextView) findViewById(R.id.tvUserName); // TextView Nombre Usuario
+        tvWelcome = (TextView) findViewById(R.id.tvWelcome); // TextView Welcome
+        expList = (ExpandableListView) findViewById(R.id.expList); // ExpandableListView List view
+        liRoutes = new ArrayList<>(); // Arreglo de rutas favoritas
 
-        //variables lista expandible
-        expList = (ExpandableListView) findViewById(R.id.expList);
-
-        //variables lista fav
-        liRoutes = new ArrayList<>();
-
-
-        //Para saber que horas son y bienvenir mejor
+        // Bienvenida
         String strGretting = "Good ";
         if (intHora <= 12) {
             strGretting += "morning";
@@ -101,64 +110,72 @@ public class OpcionTransporte extends ActionBarActivity {
         } else {
             strGretting += "night";
         }
-        //pongo mi bienvenida
-        tvWelcome.setText(strGretting);
+        tvWelcome.setText(strGretting); // Se asigna la bienvenida al TextView
 
-        // ####################### CLICS LISTA EXPANDIBLE ################################ //
+        // Obtenemos los datos del usuario
+        ParseUser currentUser = ParseUser.getCurrentUser();
 
-        //Click listener normal esto nos va a llevar a otras actividades con mapas
+        // Asignamos el nombre del usuario al TextView
+        tvUser.setText(currentUser.getUsername());
+
+        /**
+         * Child Click Listener
+         */
+
+        // Click Listener en los items hijos de la lista expandible
         expList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
+                // Aqui se haran las llamadas a Google Maps
                 return true;
             }
-
         });
 
-        //long clic en los hijos de la lista expandible
+        /**
+         * Child Long Click Listener
+         */
+
+        // Long click en los items hijos de la lista expandible
         expList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 int itemType = ExpandableListView.getPackedPositionType(id);
 
-                //si el papa id es igual a 2 es favoritos y quiero borrar
-                if(ExpandableListView.getPackedPositionGroup(id) == 2){
-                    //saco la posicion de padre e hijo
+                // Si el id es igual a 2 es una ruta favorita y se quiere borrar
+                if(ExpandableListView.getPackedPositionGroup(id) == 2) {
+                    // Se saca la posicion del hijo
                     int iGroupPosition = ExpandableListView.getPackedPositionGroup(id);
                     int iChildPosition = ExpandableListView.getPackedPositionChild(id);
 
-                    //saco el nombre de la ruta
+                    // Se obtiene el nombre de la ruta
                     strRouteName = adapter.getChild(iGroupPosition, iChildPosition).toString();
-                    //lo quito de la lista de favoritos
+
+                    // Lo quitamos de la Lista de favoritos
                     removeFavRoute(strRouteName);
                     return true;
-                }
 
-                //En este caso quiero agregar a favs
-                else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                    //saco la posicion de padre e hijo
+                    // Agregamos ruta a lista de favoritos
+                } else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    // Se saca la posicion del hijo
                     int iGroupPosition = ExpandableListView.getPackedPositionGroup(id);
                     int iChildPosition = ExpandableListView.getPackedPositionChild(id);
 
-                    //saco el nombre de la ruta
+                    // Se obtiene el nombre de la ruta
                     strRouteName = adapter.getChild(iGroupPosition, iChildPosition).toString();
-                    //lo agrego a la lista de favoritos
+
+                    // Lo agregomos a la lista de favoritos
                     addFavRoute(strRouteName);
                     return true;
                 }
-                return false;
+                return true;
             }
         });
 
+        /**
+         * Side Bar Menu
+         */
 
-        //obten datos de usuario
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        tvUser.setText(currentUser.getUsername().toString());
-
-
-        // ####################### SIDE BAR MENU ################################ //
-
-        // Titulo del Item
+        // Titulo del Action Bar
         mTitle = mDrawerTitle = getTitle();
 
         // Items del Side Bar
@@ -172,6 +189,7 @@ public class OpcionTransporte extends ActionBarActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
 
+        // Arreglo de items del Menu
         ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<NavDrawerItem>();
 
         // Aqui se agregan los items del Side Bar
@@ -181,7 +199,6 @@ public class OpcionTransporte extends ActionBarActivity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
         // Configuracion
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-
 
         // Recicla el arreglo
         navMenuIcons.recycle();
@@ -193,16 +210,17 @@ public class OpcionTransporte extends ActionBarActivity {
 
         // Habilita los iconos y les da la propiedad de Boton
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        // Checa como funciona este toolbar!!
+
+        // Drawer toolBar
         Toolbar toolbar = new Toolbar(this);
-        toolbar.setLogo(R.drawable.ic_action_expand);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                toolbar, //nav menu toggle icon
-                R.string.app_name, // nav drawer open - description for accessibility
-                R.string.app_name // nav drawer close - description for accessibility
+                toolbar, // Icono Nav Menu
+                R.string.app_name, // Nav Abierto
+                R.string.app_name // Nav Cerrado
         ){
             // Cuando se cierra el Side Bar
             public void onDrawerClosed(View view) {
@@ -223,7 +241,9 @@ public class OpcionTransporte extends ActionBarActivity {
 
     }
 
-    // ####################### Menu tradicional ################################ //
+    /**
+     * Menu Inferior
+     */
 
     /**
      * Metodo que crea menu
@@ -232,7 +252,7 @@ public class OpcionTransporte extends ActionBarActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Menu inflater
         getMenuInflater().inflate(R.menu.expreso_circuito, menu);
         return true;
     }
@@ -262,33 +282,50 @@ public class OpcionTransporte extends ActionBarActivity {
     }
 
     /***
-     * Called when invalidateOptionsMenu() is triggered
+     * Llamado cuando invalidateOptionsMenu() es activado
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // if nav drawer is opened, hide the action items
+        // Si el nav esta abierto, esconde los items del menu inferior
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         menu.findItem(R.id.Logout).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
+    /**
+     * setTitle
+     *
+     * Este metodo asigna el titulo al Action bar
+     *
+     * @param title
+     */
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
         getSupportActionBar().setTitle(mTitle);
     }
 
+    /**
+     * onPostCreate
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
+        // Syncroniza el estado Toggle despues de que ocurrio onRestoreInstanceState
         mDrawerToggle.syncState();
     }
 
+    /**
+     * onConfigurationChanged
+     *
+     * @param newConfig
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
+        // En caso de que cambie la configuracion se pasa el toggle
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
@@ -304,10 +341,14 @@ public class OpcionTransporte extends ActionBarActivity {
     }
 
     /**
-     * Diplaying fragment view for selected nav drawer list item
-     * */
+     * displayView
+     *
+     * Despliega el fragmento selecionado del menu
+     *
+     * @param position
+     */
     private void displayView(int position) {
-        // update the main content by replacing fragments
+        // Contenido de los fragmentos
         Fragment fragment = null;
         switch (position) {
             case 0:
@@ -315,11 +356,11 @@ public class OpcionTransporte extends ActionBarActivity {
                 getSupportActionBar().setTitle("Notificaciones");
                 break;
             case 1:
-                fragment = new HomeFragment();
+                fragment = new NotificacionesFragment();
                 getSupportActionBar().setTitle("Configuracion");
                 break;
             case 2:
-                fragment = new HomeFragment();
+                fragment = new NotificacionesFragment();
                 getSupportActionBar().setTitle("Informacion");
                 break;
             default:
@@ -331,7 +372,7 @@ public class OpcionTransporte extends ActionBarActivity {
             fragmentManager.beginTransaction()
                     .replace(R.id.frame_container, fragment).commit();
 
-            // update selected item and title, then close the drawer
+            // Pone el titulo de la opcion selecionada
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
             setTitle(navMenuTitles[position]);
@@ -347,14 +388,16 @@ public class OpcionTransporte extends ActionBarActivity {
      * @param strRouteName
      */
     public void removeFavRoute (String strRouteName){
-        //usa Route operations para borrar
+        // Route operations para borrar
         boolean result = dao.deleteRoute(strRouteName);
 
-        //mensaje de que fue exitoso
+        // En caso de ser borrada muestra mensaje de exito
         if(result){
             Toast.makeText(OpcionTransporte.this, strRouteName +
                     " a sido eliminado de favoritos", Toast.LENGTH_SHORT).show();
             updateDB();
+        } else {
+            Toast.makeText(OpcionTransporte.this,"Algo salio mal", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -365,14 +408,14 @@ public class OpcionTransporte extends ActionBarActivity {
      */
     public void addFavRoute (String strRouteName){
 
-        //llamo a todas las rutas
+        // LLamo a todas las rutas
         liRoutesStr = dao.getAllRoutesStr();
 
-        //si no esta vacio
+        // Si no esta vacio
         if(!strRouteName.equals("")){
-            //creo una nueva ruta
+            // Creo una nueva ruta
             Route route = new Route(strRouteName);
-            //verifico que no exista ya
+            // Verifico que no exista ya
 
 
             if(!liRoutesStr.contains(route.getName())) {
@@ -391,23 +434,21 @@ public class OpcionTransporte extends ActionBarActivity {
     }
 
     /**
-     * updateDB sirve para updatera la database con cada cambio
+     * updateDB actualiza la base de datos
      */
     public void updateDB() {
-        //obtengo todas las rutas
+        // Obtengo todas las rutas
         liRoutes = dao.getAllRoutes();
 
-        //obtengo una lista de todas las rutas en forma de string
+        // Obtengo una lista de todas las rutas en forma de string
         liRoutesStr = dao.getAllRoutesStr();
-        //obtengo la info que ira en la lista expandible
+        // Obtengo la info que ira en la lista expandible
         hmOpcionesTransporte = OpcionesTransporteProvider.getInfo(liRoutesStr);
-        //creo lista de los padres de la lista expnadible
+        // Creo lista de los padres de la lista expnadible
         liOpciones = new ArrayList<String>(hmOpcionesTransporte.keySet());
-        //adaptador que crea lista expandible
+        // Adaptador que crea lista expandible
         adapter = new OpcionesTransporteAdapter(this, hmOpcionesTransporte, liOpciones);
         expList.setAdapter(adapter);
-
-
     }
 
 
