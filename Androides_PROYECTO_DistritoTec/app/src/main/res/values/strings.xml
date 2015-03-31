@@ -31,6 +31,7 @@
         <item >Notificaciones</item>
         <item >Configuracion</item>
         <item >Informacion</item>
+        <item >Logout</item>
     </string-array>
 
     <!-- Iconos de cada items del Side Bar, ponerlos en el mismo orden -->
@@ -38,6 +39,7 @@
         <item>@drawable/ic_action_email</item>
         <item>@drawable/ic_action_settings</item>
         <item>@drawable/ic_action_help</item>
+        <item>@drawable/ic_action_cancel</item>
     </array>
 
     <!-- Content Description -->

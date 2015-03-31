@@ -2,6 +2,7 @@ package itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -29,10 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import itesm.mx.androides_proyecto_distritotec.R;
+import itesm.mx.androides_proyecto_distritotec.SideBar.Configuracion;
+import itesm.mx.androides_proyecto_distritotec.SideBar.Informacion;
 import itesm.mx.androides_proyecto_distritotec.SideBar.NavDrawerItem;
 import itesm.mx.androides_proyecto_distritotec.SideBar.NavDrawerListAdapter;
+import itesm.mx.androides_proyecto_distritotec.SideBar.Notificaciones;
 import itesm.mx.androides_proyecto_distritotec.SideBar.NotificacionesFragment;
-import itesm.mx.androides_proyecto_distritotec.SideBar.SideBarConfiguracion;
 
 /**
  * Route
@@ -199,6 +202,8 @@ public class OpcionTransporte extends ActionBarActivity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
         // Configuracion
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+        // Logout
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
 
         // Recicla el arreglo
         navMenuIcons.recycle();
@@ -348,39 +353,27 @@ public class OpcionTransporte extends ActionBarActivity {
      * @param position
      */
     private void displayView(int position) {
-        // Contenido de los fragmentos
-        Fragment fragment = null;
+        // Llamadas a las actividades correspondientes
         switch (position) {
             case 0:
-                fragment = new NotificacionesFragment();
-                getSupportActionBar().setTitle("Notificaciones");
+                Intent intentNotificaciones = new Intent(OpcionTransporte.this, Notificaciones.class);
+                startActivity(intentNotificaciones);
                 break;
             case 1:
-                fragment = new NotificacionesFragment();
-                getSupportActionBar().setTitle("Configuracion");
+                Intent intentConfiguracion = new Intent(OpcionTransporte.this, Configuracion.class);
+                startActivity(intentConfiguracion);
                 break;
             case 2:
-                fragment = new NotificacionesFragment();
-                getSupportActionBar().setTitle("Informacion");
+                Intent intentInformacion = new Intent(OpcionTransporte.this, Informacion.class);
+                startActivity(intentInformacion);
                 break;
+            case 3:
+                ParseUser.logOut();
+                finish();
             default:
                 break;
         }
-
-        if (fragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frame_container, fragment).commit();
-
-            // Pone el titulo de la opcion selecionada
-            mDrawerList.setItemChecked(position, true);
-            mDrawerList.setSelection(position);
-            setTitle(navMenuTitles[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
-        } else {
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
-        }
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     /**

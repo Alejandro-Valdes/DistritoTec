@@ -23,6 +23,9 @@
         </activity>
         <activity android:name=".LoginSingup.LoginSignupActivity"></activity>
         <activity android:name=".MenuOpcionesTransporte.OpcionTransporte"></activity>
+        <activity android:name=".SideBar.Configuracion"></activity>
+        <activity android:name=".SideBar.Notificaciones"></activity>
+        <activity android:name=".SideBar.Informacion"></activity>
     </application>
 
 </manifest>

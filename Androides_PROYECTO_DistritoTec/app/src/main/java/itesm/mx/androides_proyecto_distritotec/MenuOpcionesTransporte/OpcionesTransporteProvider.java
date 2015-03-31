@@ -41,13 +41,9 @@ public class OpcionesTransporteProvider {
         liCircuito.add("Garza Sada");
 
         // Nombre de las listas padres
-        hmOpcionesTransporte.put("   Expreso", liExpreso);
         hmOpcionesTransporte.put("   Circuito", liCircuito);
-
-        // Lista de favoritos
-        if(liFavs!=null){
-            hmOpcionesTransporte.put("  Favoritos", liFavs);
-        }
+        hmOpcionesTransporte.put("   Expreso", liExpreso);
+        hmOpcionesTransporte.put("   Favoritos", liFavs);
 
         return hmOpcionesTransporte;
     }

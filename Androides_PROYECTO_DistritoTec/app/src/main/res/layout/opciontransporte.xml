@@ -26,8 +26,7 @@
         android:textSize="25dp"
         android:layout_marginLeft="10dp"
         android:layout_alignTop="@+id/tvWelcome"
-        android:layout_toRightOf="@+id/tvWelcome"
-    />
+        android:layout_toRightOf="@+id/tvWelcome" />
 
     <ExpandableListView
         android:id="@+id/expList"
@@ -36,7 +35,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
         android:divider="#fff"
-        android:dividerHeight="2dp"/>
+        android:dividerHeight="2dp" />
+
 </RelativeLayout>
 
     <!-- Framelayout to display Fragments -->
@@ -58,4 +58,5 @@
         android:dividerHeight="1dp"
         android:listSelector="@drawable/list_selector"
         android:background="#FFFFFF"/>
+
 </android.support.v4.widget.DrawerLayout>
