@@ -376,7 +376,7 @@ public class OpcionTransporte extends ActionBarActivity {
         if(result){
             Toast.makeText(OpcionTransporte.this, strRouteName +
                     " a sido eliminado de favoritos", Toast.LENGTH_SHORT).show();
-            // updateDB();
+            updateDB();
         } else {
             Toast.makeText(OpcionTransporte.this,"Algo salio mal", Toast.LENGTH_SHORT).show();
         }
