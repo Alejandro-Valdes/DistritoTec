@@ -1,17 +1,14 @@
 package itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,22 +17,20 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.parse.ParseUser;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import itesm.mx.androides_proyecto_distritotec.GoogleMaps.MapsActivity;
 import itesm.mx.androides_proyecto_distritotec.R;
 import itesm.mx.androides_proyecto_distritotec.SideBar.Configuracion;
 import itesm.mx.androides_proyecto_distritotec.SideBar.Informacion;
 import itesm.mx.androides_proyecto_distritotec.SideBar.NavDrawerItem;
 import itesm.mx.androides_proyecto_distritotec.SideBar.NavDrawerListAdapter;
 import itesm.mx.androides_proyecto_distritotec.SideBar.Notificaciones;
-import itesm.mx.androides_proyecto_distritotec.SideBar.NotificacionesFragment;
 
 /**
  * Route
@@ -81,12 +76,7 @@ public class OpcionTransporte extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle; // Suport Action Bar
     private CharSequence mDrawerTitle; // Titulo del nav bar
     private CharSequence mTitle; // Titulo de la app
-    private String[] navMenuTitles; // Items del menu
 
-    /**
-     * Otros
-     */
-    private static final String LOG_TAG = ""; // LOG_TAG
     int intHora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY); // Hora del dia
 
 
@@ -129,7 +119,8 @@ public class OpcionTransporte extends ActionBarActivity {
         expList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                // Aqui se haran las llamadas a Google Maps
+                Intent intentMap = new Intent(OpcionTransporte.this, MapsActivity.class);
+                startActivity(intentMap);
                 return true;
             }
         });
@@ -182,7 +173,7 @@ public class OpcionTransporte extends ActionBarActivity {
         mTitle = mDrawerTitle = getTitle();
 
         // Items del Side Bar
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+        String[] navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
         // Iconos de los items del Side Bar
         TypedArray navMenuIcons = getResources()
@@ -193,7 +184,7 @@ public class OpcionTransporte extends ActionBarActivity {
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
 
         // Arreglo de items del Menu
-        ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<NavDrawerItem>();
+        ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<>();
 
         // Aqui se agregan los items del Side Bar
         // Notificaciones
@@ -221,7 +212,6 @@ public class OpcionTransporte extends ActionBarActivity {
 
         // Drawer toolBar
         Toolbar toolbar = new Toolbar(this);
-
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolbar, // Icono Nav Menu
                 R.string.app_name, // Nav Abierto
@@ -229,13 +219,11 @@ public class OpcionTransporte extends ActionBarActivity {
         ){
             // Cuando se cierra el Side Bar
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
                 invalidateOptionsMenu();
             }
 
             // Cuando se abre el Side Bar
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu();
             }
         };
@@ -258,7 +246,6 @@ public class OpcionTransporte extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Menu inflater
-        getMenuInflater().inflate(R.menu.expreso_circuito, menu);
         return true;
     }
 
@@ -277,23 +264,24 @@ public class OpcionTransporte extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
-            case R.id.Logout:
-                ParseUser.logOut();
-                finish();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     /***
-     * Llamado cuando invalidateOptionsMenu() es activado
+     * onPrepareOptionsMenu
+     *
+     * Usar este metodo en caso de tener Sidebar Menu y un menu inferior
+     *
+     * @param menu
+     *
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // Si el nav esta abierto, esconde los items del menu inferior
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.Logout).setVisible(!drawerOpen);
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        //menu.findItem(R.id.Logout).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -388,7 +376,7 @@ public class OpcionTransporte extends ActionBarActivity {
         if(result){
             Toast.makeText(OpcionTransporte.this, strRouteName +
                     " a sido eliminado de favoritos", Toast.LENGTH_SHORT).show();
-            updateDB();
+            // updateDB();
         } else {
             Toast.makeText(OpcionTransporte.this,"Algo salio mal", Toast.LENGTH_SHORT).show();
         }
@@ -410,19 +398,17 @@ public class OpcionTransporte extends ActionBarActivity {
             Route route = new Route(strRouteName);
             // Verifico que no exista ya
 
-
             if(!liRoutesStr.contains(route.getName())) {
                 dao.addRoute(route);
                 Toast.makeText(OpcionTransporte.this, strRouteName +
                         " a sido agregado a favoritos", Toast.LENGTH_SHORT).show();
                 updateDB();
+                /*https://github.com/commonsguy/cw-android/blob/master/Database/Constants/src/com/commonsware/android/constants/ConstantsBrowser.java*/
             }
             else {
                 Toast.makeText(OpcionTransporte.this, strRouteName +
                         " es parte de favoritos", Toast.LENGTH_SHORT).show();
             }
-
-
         }
     }
 
@@ -431,16 +417,20 @@ public class OpcionTransporte extends ActionBarActivity {
      */
     public void updateDB() {
         // Obtengo todas las rutas
-        liRoutes = dao.getAllRoutes();
+        //liRoutes = dao.getAllRoutes();
 
         // Obtengo una lista de todas las rutas en forma de string
         liRoutesStr = dao.getAllRoutesStr();
+
         // Obtengo la info que ira en la lista expandible
         hmOpcionesTransporte = OpcionesTransporteProvider.getInfo(liRoutesStr);
+
         // Creo lista de los padres de la lista expnadible
-        liOpciones = new ArrayList<String>(hmOpcionesTransporte.keySet());
+        liOpciones = new ArrayList<>(hmOpcionesTransporte.keySet());
+
         // Adaptador que crea lista expandible
         adapter = new OpcionesTransporteAdapter(this, hmOpcionesTransporte, liOpciones);
+
         expList.setAdapter(adapter);
     }
 

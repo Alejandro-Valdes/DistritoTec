@@ -4,34 +4,26 @@
     <string name="app_name">DistritoTec</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
-    //Strings loginsignup
-    <string name="strUsername">Username</string>
+    //Strings loginsignup    <string name="strUsername">Username</string>
     <string name="strPassword">Password</string>
     <string name="strLoginBtn">Login</string>
     <string name="strSignupBtn">Sign Up</string>
-
-    //strings Opcion Transporte
-    <string name="strWelcome">Welcome </string>
+    //strings Opcion Transporte    <string name="strWelcome">Welcome </string>
     <string name="strLogoutBtn">Log Out</string>
     <string name="logout">Logout</string>
     <string name="exit">Exit</string>
     <string name="strFavs">Favourite routes</string>
-
-    //strings menus context
-    <string name="strAdd">Add to favourites</string>
+    //strings menus context    <string name="strAdd">Add to favourites</string>
     <string name="strRemove">Remove from favourites</string>
-
-
     <string name="drawer_open">Slider Menu Opened</string>
     <string name="drawer_close">Slider Menu Closed</string>
 
     <!-- Nombre de los items del Side Bar -->
     <string-array name="nav_drawer_items">
-        <item >Notificaciones</item>
-        <item >Configuracion</item>
-        <item >Informacion</item>
-        <item >Logout</item>
+        <item>Notificaciones</item>
+        <item>Configuracion</item>
+        <item>Informacion</item>
+        <item>Logout</item>
     </string-array>
 
     <!-- Iconos de cada items del Side Bar, ponerlos en el mismo orden -->
@@ -44,6 +36,6 @@
 
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
-
+    <string name="title_activity_maps">Map</string>
 
 </resources>

@@ -119,7 +119,7 @@ public class OpcionesTransporteAdapter extends BaseExpandableListAdapter{
      */
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     /**
