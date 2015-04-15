@@ -24,7 +24,7 @@ public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    static final LatLng ITESM = new LatLng(25.649713, -100.290032);
+    static final LatLng ITESM = new LatLng(25.649713, -100);
     GoogleApiClient mGoogleApiClient;
 
     @Override
