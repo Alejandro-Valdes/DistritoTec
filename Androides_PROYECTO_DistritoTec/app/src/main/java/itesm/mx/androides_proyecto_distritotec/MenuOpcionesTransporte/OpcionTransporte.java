@@ -3,7 +3,6 @@ package itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -25,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import itesm.mx.androides_proyecto_distritotec.GoogleMaps.MapsActivity;
+import itesm.mx.androides_proyecto_distritotec.GoogleMaps.MapsActivityRoute;
 import itesm.mx.androides_proyecto_distritotec.R;
 import itesm.mx.androides_proyecto_distritotec.SideBar.Configuracion;
 import itesm.mx.androides_proyecto_distritotec.SideBar.Informacion;
@@ -106,10 +106,10 @@ public class OpcionTransporte extends ActionBarActivity {
         tvWelcome.setText(strGretting); // Se asigna la bienvenida al TextView
 
         // Obtenemos los datos del usuario
-        ParseUser currentUser = ParseUser.getCurrentUser();
+        //ParseUser currentUser = ParseUser.getCurrentUser();
 
         // Asignamos el nombre del usuario al TextView
-        tvUser.setText(currentUser.getUsername());
+        //tvUser.setText(currentUser.getUsername());
 
         /**
          * Child Click Listener
@@ -119,7 +119,7 @@ public class OpcionTransporte extends ActionBarActivity {
         expList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Intent intentMap = new Intent(OpcionTransporte.this, MapsActivity.class);
+                Intent intentMap = new Intent(OpcionTransporte.this, MapsActivityRoute.class);
                 startActivity(intentMap);
                 return true;
             }

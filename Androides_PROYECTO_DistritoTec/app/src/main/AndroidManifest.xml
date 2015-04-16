@@ -47,6 +47,15 @@
             <meta-data android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
         </activity>
+
+
+        <activity android:name="itesm.mx.androides_proyecto_distritotec.GoogleMaps.MapsActivityRoute"
+            android:label="@string/title_activity_maps_activity_route">
+            <meta-data android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
+        </activity>
+
     </application>
 
 </manifest>
+
