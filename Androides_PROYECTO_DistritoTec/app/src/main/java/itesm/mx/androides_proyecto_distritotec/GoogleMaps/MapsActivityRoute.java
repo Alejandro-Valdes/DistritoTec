@@ -19,17 +19,14 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.plus.model.people.Person;
 
 public class MapsActivityRoute extends FragmentActivity {
 
@@ -38,7 +35,14 @@ public class MapsActivityRoute extends FragmentActivity {
     Double templon, templat;
     LatLng ITESM = new LatLng(25.649713, -100.290032);
     LatLng myPos = new LatLng(25.656848, -100.2826138);
-
+    LatLng waypoint1;
+    LatLng waypoint2;
+    LatLng waypoint3;
+    LatLng waypoint4;
+    LatLng waypoint5;
+    LatLng waypoint6;
+    LatLng waypoint7;
+    LatLng waypoint8;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +65,11 @@ public class MapsActivityRoute extends FragmentActivity {
 
             MarkerOptions options = new MarkerOptions();
 
-            markerPoints.add(ITESM);
+            //TEST RUTA VALLE
+            myPos = new LatLng(25.655767,-100.385106);
+
             markerPoints.add(myPos);
+            markerPoints.add(ITESM);
 
 
             map.addMarker(options.position(myPos).icon(BitmapDescriptorFactory.
@@ -70,10 +77,40 @@ public class MapsActivityRoute extends FragmentActivity {
             map.addMarker(options.position(ITESM).icon(BitmapDescriptorFactory.
                     defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
-            LatLng waypoint = new LatLng(25.663190,-100.419331);
-            markerPoints.add(waypoint);
-            map.addMarker(options.position(waypoint).icon(BitmapDescriptorFactory.
-                    defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+            //TEST WAYPOINTS
+            waypoint1 = new LatLng(25.655767,-100.385106);
+            markerPoints.add(waypoint1);
+
+            map.addMarker(options.position(waypoint1));
+
+            waypoint2 = new LatLng(25.667414,-100.379827);
+            markerPoints.add(waypoint2);
+            //map.addMarker(options.position(waypoint2));
+
+            waypoint3 = new LatLng(25.664958,-100.374935);
+            markerPoints.add(waypoint3);
+            //map.addMarker(options.position(waypoint3));
+
+            waypoint4 = new LatLng(25.663952,-100.358112);
+            markerPoints.add(waypoint4);
+            //map.addMarker(options.position(waypoint4));
+
+            waypoint5 = new LatLng(25.652501,-100.358198);
+            markerPoints.add(waypoint5);
+            //map.addMarker(options.position(waypoint5));
+
+            waypoint6 = new LatLng(25.659968,-100.349379);
+            markerPoints.add(waypoint6);
+            //map.addMarker(options.position(waypoint6));
+
+            waypoint7 = new LatLng(25.644222,-100.325861);
+            markerPoints.add(waypoint7);
+            //map.addMarker(options.position(waypoint7));
+
+            waypoint8 = new LatLng(25.614661,-100.271144);
+            markerPoints.add(waypoint8);
+            //map.addMarker(options.position(waypoint8));
+
 
             String url = getDirectionsUrl(markerPoints.get(0), markerPoints.get(1));
 
@@ -98,9 +135,16 @@ public class MapsActivityRoute extends FragmentActivity {
 
         // Building the parameters to the web service
         String waypoints = "waypoints="+
-                "25.663190,-100.419331";
+                waypoint1.latitude+","+waypoint1.longitude+"|"+
+                waypoint2.latitude+","+waypoint2.longitude+"|"+
+                waypoint3.latitude+","+waypoint3.longitude+"|"+
+                waypoint4.latitude+","+waypoint4.longitude+"|"+
+                waypoint5.latitude+","+waypoint5.longitude+"|"+
+                waypoint6.latitude+","+waypoint6.longitude+"|"+
+                waypoint7.latitude+","+waypoint7.longitude+"|"+
+                waypoint8.latitude+","+waypoint8.longitude;
 
-        String parameters = str_origin +"&"+str_dest+"&"+waypoints+"&"+sensor;
+                String parameters = str_origin +"&"+str_dest+"&"+waypoints+"&"+sensor;
 
         // Output format
         String output = "json";
