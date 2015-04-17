@@ -21,11 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:inputType="textPassword"
-        android:ems="10"
         android:id="@+id/passwordET"
+        android:layout_marginTop="260dp"
         android:background="@drawable/edittextdesign"
         android:hint=" Password"
-        android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/usuarioET" />
 
