@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import itesm.mx.androides_proyecto_distritotec.GoogleMaps.MapsActivity;
+import itesm.mx.androides_proyecto_distritotec.LoginSingup.LoginSignupActivity;
 import itesm.mx.androides_proyecto_distritotec.R;
 import itesm.mx.androides_proyecto_distritotec.SideBar.Configuracion;
 import itesm.mx.androides_proyecto_distritotec.SideBar.Informacion;
@@ -357,6 +358,8 @@ public class OpcionTransporte extends ActionBarActivity {
                 break;
             case 3:
                 ParseUser.logOut();
+                Intent intentRegresar = new Intent (OpcionTransporte.this, LoginSignupActivity.class);
+                startActivity(intentRegresar);
                 finish();
             default:
                 break;

@@ -3,6 +3,7 @@ package itesm.mx.androides_proyecto_distritotec.LoginSingup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte.OpcionTransporte;
 import itesm.mx.androides_proyecto_distritotec.R;
+import itesm.mx.androides_proyecto_distritotec.SignupActivity;
 
 /**
  * LoginSingupActivity
@@ -55,6 +57,7 @@ public class LoginSignupActivity extends ActionBarActivity {
         etUsername = (EditText)findViewById(R.id.etUserName); // EditText UserName
         etPassword = (EditText)findViewById(R.id.etPassword); // EditText Password
 
+
         getSupportActionBar().hide(); // Esconde el SupportActionBar
 
         // Metodo on ClickListener para el Boton Login
@@ -69,6 +72,8 @@ public class LoginSignupActivity extends ActionBarActivity {
              */
             @Override
             public void onClick(View v) {
+
+
                 // El input del usuario de pasa a las variables correspontientes
                 strPassword = etPassword.getText().toString(); // UserName
                 strUsername = etUsername.getText().toString(); // Password
@@ -93,6 +98,7 @@ public class LoginSignupActivity extends ActionBarActivity {
                             @Override
                             public void done(ParseUser parseUser, ParseException e) {
                                 if(parseUser != null){
+
                                     Intent intent = new Intent(LoginSignupActivity.this,
                                             OpcionTransporte.class);
                                     startActivity(intent); // Llama a la actividad OpcionTransporte
@@ -109,59 +115,31 @@ public class LoginSignupActivity extends ActionBarActivity {
             }
         });
 
+
+
         // Metodo on ClickListener para el Boton Singup
         btnSignup.setOnClickListener(new View.OnClickListener() {
-            /**
-             * onClick
-             *
-             * Metodo que verifica si el usuario hace click en el boton Singup
-             *
-             * @Param v de tipo <code>View</code> recibe el view donde se realizo el click
-             * @return void
-             */
-            @Override
-            public void onClick(View v) {
-                // El input del usuario de pasa a las variables correspontientes
-                strPassword = etPassword.getText().toString(); // Password
-                strUsername = etUsername.getText().toString(); // Username
-
-                // Verifica que los campos no se dejen vacios
-                if(strUsername.equals("") || strPassword.equals("")){
-                    Toast.makeText(getApplicationContext(),
-                            "Porfavor llena todos los campos",Toast.LENGTH_LONG).show();
-                } else {
-                    // Se crea un nuevo usuario y se guarda su informacion
-                    ParseUser user = new ParseUser();
-                    user.setUsername(strUsername); // UserName
-                    user.setPassword(strPassword); // Password
-
-                    /* Conecta al ausuario a la aplicacion mientras despliega un mensaje de exito
-                     * o de error
-                     */
-                    user.signUpInBackground(new SignUpCallback() {
-
-                        /**
-                         * done
-                         *
-                         * Metodo que verifica si hubo error a la hora de crear el usuario
-                         *
-                         * @Param e de tipo <code>ParseException</code> si no hay exception marca
-                         * registro exitoso de lo contrario marca error.
-                         * @return void
-                         */
-                        @Override
-                        public void done(ParseException e) {
-                            if(e == null){
-                                Toast.makeText(getApplicationContext(),"Registro exitoso!",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(),"Hubo un error, " +
-                                        "intenta de nuevo", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }
-            }
+          @Override
+        public void onClick(View v){
+              Intent RegisterIntent = new Intent(LoginSignupActivity.this, SignupActivity.class);
+              startActivity(RegisterIntent);
+          }
         });
+
+
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            finish();
+            return false; //I have tried here true also
+        }
+        return super.onKeyDown(keyCode, event);
+
     }
 }
+
