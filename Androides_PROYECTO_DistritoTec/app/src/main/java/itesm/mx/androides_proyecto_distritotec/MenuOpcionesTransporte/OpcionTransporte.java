@@ -109,10 +109,10 @@ public class OpcionTransporte extends ActionBarActivity {
         tvWelcome.setText(strGretting); // Se asigna la bienvenida al TextView
 
         // Obtenemos los datos del usuario
-        //ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseUser currentUser = ParseUser.getCurrentUser();
 
         // Asignamos el nombre del usuario al TextView
-        //tvUser.setText(currentUser.getUsername());
+        tvUser.setText(currentUser.getUsername());
 
         /**
          * Child Click Listener
