@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.parse.GetCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -24,6 +25,7 @@ public class Location extends ActionBarActivity  implements
     GoogleApiClient mGoogleApiClient;
 
     ParseObject ExpresoLocation = new ParseObject("Routes");
+    ParseQuery<ParseObject> query = ParseQuery.getQuery("Routes");
 
     TextView tvRoute;
     TextView tvLong;
@@ -42,7 +44,7 @@ public class Location extends ActionBarActivity  implements
         onConnected(savedInstanceState);
         buildGoogleApiClient();
 
-        //ExpresoLocation.setObjectId("t6iU73vCGW");
+        ExpresoLocation.setObjectId("VJhJgBjYF5");
 
 
         tvRoute = (TextView) findViewById(R.id.tvRuta);
@@ -82,10 +84,15 @@ public class Location extends ActionBarActivity  implements
                 String auxlon = templon.toString();
                 String auxlat = templat.toString();
 
+                ExpresoLocation.put("idRuta", 10);
+                ExpresoLocation.put("nombre", "VALLE");
                 ExpresoLocation.put("longitud", auxlon);
                 ExpresoLocation.put("latitud", auxlat);
-
-                ExpresoLocation.saveInBackground();
+                try {
+                    ExpresoLocation.save();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 tvLong.setText(ExpresoLocation.getString("longitud"));
                 tvLat.setText(ExpresoLocation.getString("latitud"));
