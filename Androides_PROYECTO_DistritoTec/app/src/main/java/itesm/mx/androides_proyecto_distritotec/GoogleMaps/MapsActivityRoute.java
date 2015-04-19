@@ -1,5 +1,6 @@
 package itesm.mx.androides_proyecto_distritotec.GoogleMaps;
 
+import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import itesm.mx.androides_proyecto_distritotec.R;
 
@@ -12,14 +13,20 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.LogRecord;
 
 import org.json.JSONObject;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -27,14 +34,24 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.GetCallback;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
-public class MapsActivityRoute extends FragmentActivity {
+public class MapsActivityRoute extends FragmentActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+
+    GoogleApiClient mGoogleApiClient;
+    ParseObject ExpresoLocation = new ParseObject("Routes");
+    ParseQuery<ParseObject> query = ParseQuery.getQuery("Routes");
 
     GoogleMap map;
     ArrayList<LatLng> markerPoints;
     Double templon, templat;
     LatLng ITESM = new LatLng(25.649713, -100.290032);
     LatLng myPos = new LatLng(25.656848, -100.2826138);
+
     LatLng waypoint1;
     LatLng waypoint2;
     LatLng waypoint3;
@@ -44,10 +61,32 @@ public class MapsActivityRoute extends FragmentActivity {
     LatLng waypoint7;
     LatLng waypoint8;
 
+    //timer
+    int iTime = 5000; //5 second
+    Handler hHandler;
+    Runnable rRunnable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_activity_route);
+
+        onConnected(savedInstanceState);
+        buildGoogleApiClient();
+
+        ExpresoLocation.setObjectId("VJhJgBjYF5");
+
+        hHandler = new Handler();
+
+        rRunnable = new Runnable(){
+            @Override
+            public void run() {
+                updateStatus();
+                hHandler.postDelayed(rRunnable, iTime);
+            }
+        };
+
+        rRunnable.run();
 
         // Initializing
         markerPoints = new ArrayList<LatLng>();
@@ -118,8 +157,48 @@ public class MapsActivityRoute extends FragmentActivity {
 
             downloadTask.execute(url);
 
-
         }
+    }
+
+    private void updateStatus() {
+
+        query.getInBackground(ExpresoLocation.getObjectId(),new GetCallback<ParseObject>() {
+
+            @Override
+            public void done(ParseObject parseObject, com.parse.ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getApplicationContext(), "Lon: " +
+                            parseObject.getString("longitud") + "\n" +
+                            "Lat: " + parseObject.getString("latitud"), Toast.LENGTH_LONG).show();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     private String getDirectionsUrl(LatLng origin,LatLng dest){
@@ -193,6 +272,7 @@ public class MapsActivityRoute extends FragmentActivity {
         }
         return data;
     }
+
 
     // Fetches data from url passed
     private class DownloadTask extends AsyncTask<String, Void, String>{
