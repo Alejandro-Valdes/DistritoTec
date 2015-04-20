@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="@drawable/list_selector">
+    android:background="#FFFFFF">
 
     <!-- Checa para que es src y el icono que dan -->
     <ImageView
@@ -24,7 +24,9 @@
         android:layout_toRightOf="@id/icon"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textColor="#BBB111"
+        android:textColor="#000000"
+        android:textSize="15dp"
+        android:textStyle="bold"
         android:gravity="center_vertical"
         android:paddingRight="40dp"/>
 
@@ -33,7 +35,7 @@
     <TextView android:id="@+id/counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#000000"
+        android:background="#FF0000"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="8dp"
