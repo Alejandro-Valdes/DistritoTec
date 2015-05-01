@@ -232,9 +232,6 @@ public class MapsActivityRoute extends FragmentActivity implements
                 waypoint7 = new LatLng(25.644222,-100.325861);
                 waypoint8 = new LatLng(25.614661,-100.271144);
                 break;
-
-
-
         }
 
         markerPoints.add(initialPos);

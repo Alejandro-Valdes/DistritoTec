@@ -28,6 +28,7 @@ public class MainActivity extends ActionBarActivity {
                 "Valle",
                 "Galerias",
                 "San Nicolas",
+                "Guadalupe",
                 "Villas TEC",
                 "Colonia Roma",
                 "Garza Sada"

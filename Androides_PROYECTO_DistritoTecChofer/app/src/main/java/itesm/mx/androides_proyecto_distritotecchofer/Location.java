@@ -32,7 +32,6 @@ public class Location extends ActionBarActivity  implements
     TextView tvLat;
 
     String strRoute;
-    double dLong, dLat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +40,39 @@ public class Location extends ActionBarActivity  implements
 
         Parse.initialize(this, "Pc66LZ9sLsdgr10KSJPD1qTwO74Ov6NWvDOTcYJb",
                 "huXDJ9jUWe0zP1dDOFMCByyUAZ5RflNR9mN1pGly");
+
+        Intent intent = getIntent();
+        strRoute = intent.getStringExtra("strRoute").trim();
+
         onConnected(savedInstanceState);
         buildGoogleApiClient();
 
-        ExpresoLocation.setObjectId("VJhJgBjYF5");
+        switch (strRoute){
+            case "Guadalupe":
+                ExpresoLocation.setObjectId("gZp7gXVYJs");
+                break;
+            case "San Nicolas":
+                ExpresoLocation.setObjectId("ZPNpXRmFl4");
+                break;
+            case "Galerias":
+                ExpresoLocation.setObjectId("PUUe9yVvxh");
+                break;
+            case "Valle":
+                ExpresoLocation.setObjectId("VJhJgBjYF5");
+                break;
+            default:
+                ExpresoLocation.setObjectId("VJhJgBjYF5");
+                break;
+        }
+
+
 
 
         tvRoute = (TextView) findViewById(R.id.tvRuta);
         tvLat = (TextView) findViewById(R.id.tvLat);
         tvLong = (TextView) findViewById(R.id.tvLong);
 
-        Intent intent = getIntent();
-        strRoute = intent.getStringExtra("strRoute");
+
 
         tvRoute.setText(strRoute);
 
@@ -84,8 +104,6 @@ public class Location extends ActionBarActivity  implements
                 String auxlon = templon.toString();
                 String auxlat = templat.toString();
 
-                ExpresoLocation.put("idRuta", 10);
-                ExpresoLocation.put("nombre", "VALLE");
                 ExpresoLocation.put("longitud", auxlon);
                 ExpresoLocation.put("latitud", auxlat);
                 try {
