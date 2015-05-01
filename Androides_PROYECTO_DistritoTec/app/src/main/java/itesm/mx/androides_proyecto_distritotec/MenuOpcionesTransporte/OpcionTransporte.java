@@ -149,6 +149,8 @@ public class OpcionTransporte extends ActionBarActivity {
 
                     // Lo quitamos de la Lista de favoritos
                     removeFavRoute(strRouteName);
+                    expList.expandGroup(ExpandableListView.getPackedPositionGroup(id));
+
                     return true;
 
                     // Agregamos ruta a lista de favoritos
@@ -162,6 +164,9 @@ public class OpcionTransporte extends ActionBarActivity {
 
                     // Lo agregomos a la lista de favoritos
                     addFavRoute(strRouteName);
+                    expList.expandGroup(2);
+                    expList.expandGroup(ExpandableListView.getPackedPositionGroup(id));
+
                     return true;
                 }
                 return true;

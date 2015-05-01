@@ -90,6 +90,7 @@ public class Location extends ActionBarActivity  implements
                 ExpresoLocation.put("latitud", auxlat);
                 try {
                     ExpresoLocation.save();
+                    Toast.makeText(getApplicationContext(), auxlon + " " + auxlat, Toast.LENGTH_SHORT).show();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
