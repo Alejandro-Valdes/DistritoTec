@@ -52,7 +52,7 @@ public class MapsActivityRoute extends FragmentActivity implements
     ArrayList<LatLng> markerPoints;
     MarkerOptions options = new MarkerOptions();
     LatLng ITESM = new LatLng(25.649713, -100.290032);
-    LatLng myPos = new LatLng(25.656848, -100.2826138);
+    LatLng initialPos = new LatLng(25.656848, -100.2826138);
 
     LatLng waypoint1;
     LatLng waypoint2;
@@ -65,42 +65,33 @@ public class MapsActivityRoute extends FragmentActivity implements
 
     //timer
 
-    int iTime = 3000; //5 second
+    int iTime = 3000; //3 second
     Handler hHandler;
     Runnable rRunnable;
 
     Marker mCamion;
-    Location lCamion;
     LatLng latLngCamion;
     double dLat = 0;
     double dLong = 0;
     boolean bGo = true;
+
+    String strRouteName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_activity_route);
 
+        Bundle bundle = getIntent().getExtras();
+
+        strRouteName = bundle.getString("routeName").trim();
+
+        Toast.makeText(getApplicationContext(),
+                "Ruta " + strRouteName,Toast.LENGTH_SHORT).show();
+
         onConnected(savedInstanceState);
         buildGoogleApiClient();
 
-        ExpresoLocation.setObjectId("VJhJgBjYF5");
-
-        hHandler = new Handler();
-
-        rRunnable = new Runnable(){
-            @Override
-            public void run() {
-        if(bGo)
-        updateStatus();
-            hHandler.postDelayed(rRunnable, iTime);
-            }
-        };
-
-        rRunnable.run();
-
-        // Initializing
-        markerPoints = new ArrayList<LatLng>();
 
         // Getting reference to SupportMapFragment of the activity_main
         SupportMapFragment fm = (SupportMapFragment)getSupportFragmentManager().
@@ -113,51 +104,27 @@ public class MapsActivityRoute extends FragmentActivity implements
         if(map!=null){
             // Enable MyLocation Button in the Map
             map.setMyLocationEnabled(true);
-
-
-            //TEST RUTA VALLE
-            myPos = new LatLng(25.655767,-100.385106);
-
-            markerPoints.add(myPos);
-            map.addMarker(options.position(myPos).icon(BitmapDescriptorFactory.
-                    defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-
-            markerPoints.add(ITESM);
-            map.addMarker(options.position(ITESM).icon(BitmapDescriptorFactory.
-                    defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-            //TEST WAYPOINTS
-            waypoint1 = new LatLng(25.655767,-100.385106);
-            markerPoints.add(waypoint1);
-
-            waypoint2 = new LatLng(25.667414,-100.379827);
-            markerPoints.add(waypoint2);
-
-            waypoint3 = new LatLng(25.664958,-100.374935);
-            markerPoints.add(waypoint3);
-
-            waypoint4 = new LatLng(25.663952,-100.358112);
-            markerPoints.add(waypoint4);
-
-            waypoint5 = new LatLng(25.652501,-100.358198);
-            markerPoints.add(waypoint5);
-
-            waypoint6 = new LatLng(25.659968,-100.349379);
-            markerPoints.add(waypoint6);
-
-            waypoint7 = new LatLng(25.644222,-100.325861);
-            markerPoints.add(waypoint7);
-
-            waypoint8 = new LatLng(25.614661,-100.271144);
-            markerPoints.add(waypoint8);
-
-            String url = getDirectionsUrl(markerPoints.get(0), markerPoints.get(1));
-
-            DownloadTask downloadTask = new DownloadTask();
-
-            downloadTask.execute(url);
-
+            setMap(strRouteName);
         }
+
+
+    //QUE DEPENDA DEL CAMION
+
+        ExpresoLocation.setObjectId("VJhJgBjYF5");
+
+        hHandler = new Handler();
+
+        rRunnable = new Runnable(){
+            @Override
+            public void run() {
+                if(bGo)
+                    updateStatus();
+                hHandler.postDelayed(rRunnable, iTime);
+            }
+        };
+
+        rRunnable.run();
+
     }
 
     private void updateStatus() {
@@ -194,6 +161,103 @@ public class MapsActivityRoute extends FragmentActivity implements
                 }
             }
         });
+    }
+
+    public void setMap (String strName){
+
+        // Initializing
+        markerPoints = new ArrayList<LatLng>();
+
+        switch (strName) {
+            case "Valle":
+                initialPos = new LatLng(25.655767,-100.385106);
+                waypoint1 = new LatLng(25.655767,-100.385106);
+                waypoint2 = new LatLng(25.667414,-100.379827);
+                waypoint3 = new LatLng(25.664958,-100.374935);
+                waypoint4 = new LatLng(25.663952,-100.358112);
+                waypoint5 = new LatLng(25.652501,-100.358198);
+                waypoint6 = new LatLng(25.659968,-100.349379);
+                waypoint7 = new LatLng(25.644222,-100.325861);
+                waypoint8 = new LatLng(25.614661,-100.271144);
+                break;
+
+            case "Galerias":
+                initialPos = new LatLng(25.695228,-100.372505);
+                waypoint1 = new LatLng(25.689833,-100.372478);
+                waypoint2 = new LatLng(25.686846,-100.369956);
+                waypoint3 = new LatLng(25.681605,-100.370375);
+                waypoint4 = new LatLng(25.681763,-100.365491);
+                waypoint5 = new LatLng(25.683368,-100.364496);
+                waypoint6 = new LatLng(25.685611,-100.365217);
+                waypoint7 = new LatLng(25.682551,-100.355365);
+                waypoint8 = new LatLng(25.665682,-100.297413);
+                break;
+
+            case "San Nicolas":
+                initialPos = new LatLng(25.768563,-100.272694);
+                waypoint1 = new LatLng(25.768563,-100.272694);
+                waypoint2 = new LatLng(25.754601,-100.277458);
+                waypoint3 = new LatLng(25.746059,-100.269282);
+                waypoint4 = new LatLng(25.742145,-100.295413);
+                waypoint5 = new LatLng(25.742720,-100.306501);
+                waypoint6 = new LatLng(25.742014,-100.312659);
+                waypoint7 = new LatLng(25.736883,-100.310379);
+                waypoint8 = new LatLng(25.665132, -100.320840);
+                break;
+
+            case "Guadalupe":
+                initialPos = new LatLng(25.722479,-100.215279);
+                waypoint1 = new LatLng(25.722479,-100.215279);
+                waypoint2 = new LatLng(25.706268,-100.224388);
+                waypoint3 = new LatLng(25.702894,-100.231791);
+                waypoint4 = new LatLng(25.702537,-100.254589);
+                waypoint5 = new LatLng(25.692627,-100.254664);
+                waypoint6 = new LatLng(25.686517,-100.261939);
+                waypoint7 = new LatLng(25.672564,-100.286722);
+                waypoint8 = new LatLng(25.657256, -100.280564);
+                break;
+
+            //la del valle
+            default:
+                initialPos = new LatLng(25.655767,-100.385106);
+                waypoint1 = new LatLng(25.655767,-100.385106);
+                waypoint2 = new LatLng(25.667414,-100.379827);
+                waypoint3 = new LatLng(25.664958,-100.374935);
+                waypoint4 = new LatLng(25.663952,-100.358112);
+                waypoint5 = new LatLng(25.652501,-100.358198);
+                waypoint6 = new LatLng(25.659968,-100.349379);
+                waypoint7 = new LatLng(25.644222,-100.325861);
+                waypoint8 = new LatLng(25.614661,-100.271144);
+                break;
+
+
+
+        }
+
+        markerPoints.add(initialPos);
+        map.addMarker(options.position(initialPos).icon(BitmapDescriptorFactory.
+                defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+
+        markerPoints.add(ITESM);
+        map.addMarker(options.position(ITESM).icon(BitmapDescriptorFactory.
+                defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+        markerPoints.add(waypoint1);
+        markerPoints.add(waypoint2);
+        markerPoints.add(waypoint3);
+        markerPoints.add(waypoint4);
+        markerPoints.add(waypoint5);
+        markerPoints.add(waypoint6);
+        markerPoints.add(waypoint7);
+        markerPoints.add(waypoint8);
+
+
+        String url = getDirectionsUrl(markerPoints.get(0), markerPoints.get(1));
+
+        DownloadTask downloadTask = new DownloadTask();
+
+        downloadTask.execute(url);
+
     }
 
     private void buildGoogleApiClient() {

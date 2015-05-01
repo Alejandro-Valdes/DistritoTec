@@ -33,6 +33,7 @@ public class OpcionesTransporteProvider {
         liExpreso.add("Valle");
         liExpreso.add("Galerias");
         liExpreso.add("San Nicolas");
+        liExpreso.add("Guadalupe");
 
         // Lista del Circuito TEC
         List<String> liCircuito = new ArrayList<String>();

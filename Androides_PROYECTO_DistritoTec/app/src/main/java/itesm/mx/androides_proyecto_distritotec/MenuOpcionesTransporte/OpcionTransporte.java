@@ -123,6 +123,11 @@ public class OpcionTransporte extends ActionBarActivity {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 Intent intentMap = new Intent(OpcionTransporte.this, MapsActivityRoute.class);
+
+                intentMap.putExtra("routeName",
+                        parent.getExpandableListAdapter()
+                                .getChild(groupPosition, childPosition).toString());
+
                 startActivity(intentMap);
                 return true;
             }
