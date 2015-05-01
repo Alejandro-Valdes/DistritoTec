@@ -110,8 +110,6 @@ public class MapsActivityRoute extends FragmentActivity implements
 
     //QUE DEPENDA DEL CAMION
 
-        ExpresoLocation.setObjectId("VJhJgBjYF5");
-
         hHandler = new Handler();
 
         rRunnable = new Runnable(){
@@ -170,6 +168,7 @@ public class MapsActivityRoute extends FragmentActivity implements
 
         switch (strName) {
             case "Valle":
+                ExpresoLocation.setObjectId("VJhJgBjYF5");
                 initialPos = new LatLng(25.655767,-100.385106);
                 waypoint1 = new LatLng(25.655767,-100.385106);
                 waypoint2 = new LatLng(25.667414,-100.379827);
@@ -182,6 +181,7 @@ public class MapsActivityRoute extends FragmentActivity implements
                 break;
 
             case "Galerias":
+                ExpresoLocation.setObjectId("PUUe9yVvxh");
                 initialPos = new LatLng(25.695228,-100.372505);
                 waypoint1 = new LatLng(25.689833,-100.372478);
                 waypoint2 = new LatLng(25.686846,-100.369956);
@@ -194,6 +194,7 @@ public class MapsActivityRoute extends FragmentActivity implements
                 break;
 
             case "San Nicolas":
+                ExpresoLocation.setObjectId("ZPNpXRmFl4");
                 initialPos = new LatLng(25.768563,-100.272694);
                 waypoint1 = new LatLng(25.768563,-100.272694);
                 waypoint2 = new LatLng(25.754601,-100.277458);
@@ -206,6 +207,7 @@ public class MapsActivityRoute extends FragmentActivity implements
                 break;
 
             case "Guadalupe":
+                ExpresoLocation.setObjectId("gZp7gXVYJs");
                 initialPos = new LatLng(25.722479,-100.215279);
                 waypoint1 = new LatLng(25.722479,-100.215279);
                 waypoint2 = new LatLng(25.706268,-100.224388);
@@ -219,6 +221,7 @@ public class MapsActivityRoute extends FragmentActivity implements
 
             //la del valle
             default:
+                ExpresoLocation.setObjectId("VJhJgBjYF5");
                 initialPos = new LatLng(25.655767,-100.385106);
                 waypoint1 = new LatLng(25.655767,-100.385106);
                 waypoint2 = new LatLng(25.667414,-100.379827);
