@@ -64,7 +64,7 @@ public class MapsActivityRoute extends FragmentActivity implements
     LatLng waypoint8;
 
     //timer
-    int iTime = 7000; //5 second
+    int iTime = 3000; //5 second
     Handler hHandler;
     Runnable rRunnable;
 
@@ -73,6 +73,8 @@ public class MapsActivityRoute extends FragmentActivity implements
     LatLng latLngCamion;
     double dLat = 0;
     double dLong = 0;
+
+    boolean bGo = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +91,8 @@ public class MapsActivityRoute extends FragmentActivity implements
         rRunnable = new Runnable(){
             @Override
             public void run() {
-                updateStatus();
+                if(bGo)
+                    updateStatus();
                 hHandler.postDelayed(rRunnable, iTime);
             }
         };
@@ -159,6 +162,11 @@ public class MapsActivityRoute extends FragmentActivity implements
 
     private void updateStatus() {
 
+        if(mCamion != null){
+            bGo = false;
+            mCamion.remove();
+        }
+
         query.getInBackground(ExpresoLocation.getObjectId(),new GetCallback<ParseObject>() {
 
             @Override
@@ -174,26 +182,19 @@ public class MapsActivityRoute extends FragmentActivity implements
                 } else {
                     e.printStackTrace();
                 }
+
+                if(dLat!=0 & dLong!=0) {
+
+                    latLngCamion = new LatLng(dLat, dLong);
+
+
+                    mCamion = map.addMarker(options.position(latLngCamion).icon(BitmapDescriptorFactory
+                            .fromResource(R.drawable.transport)));
+
+                    bGo = true;
+                }
             }
         });
-
-        if(mCamion != null) {
-            mCamion.remove();
-        }
-
-        if(dLat!=0 & dLong!=0) {
-
-            latLngCamion = new LatLng(dLat, dLong);
-
-
-            mCamion = map.addMarker(options.position(latLngCamion).icon(BitmapDescriptorFactory
-                    .fromResource(R.drawable.transport)));
-
-            map.moveCamera(CameraUpdateFactory.newLatLng(latLngCamion));
-            map.animateCamera(CameraUpdateFactory.zoomTo(15));
-        }
-
-
     }
 
     private void buildGoogleApiClient() {
