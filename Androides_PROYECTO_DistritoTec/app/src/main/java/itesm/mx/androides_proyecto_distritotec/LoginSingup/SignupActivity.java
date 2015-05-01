@@ -1,4 +1,4 @@
-package itesm.mx.androides_proyecto_distritotec;
+package itesm.mx.androides_proyecto_distritotec.LoginSingup;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,22 +13,31 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import itesm.mx.androides_proyecto_distritotec.R;
+
 
 public class SignupActivity extends ActionBarActivity {
 
     EditText usernameET;
     EditText passwordET;
+    EditText passwordRepET;
+    EditText emailET;
     Button signupButton;
     String password;
+    String passwordRep;
+    String email;
     String usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        getSupportActionBar().hide(); // Esconde el SupportActionBar
 
         usernameET = (EditText) findViewById(R.id.usuarioET);
         passwordET = (EditText) findViewById(R.id.passwordET);
+        passwordRepET = (EditText) findViewById(R.id.passwordRepET);
+        emailET = (EditText) findViewById(R.id.emailET);
         signupButton = (Button) findViewById(R.id.signupButton);
 
         signupButton.setOnClickListener(new View.OnClickListener() {
@@ -45,17 +54,24 @@ public class SignupActivity extends ActionBarActivity {
             public void onClick(View v) {
                 // El input del usuario de pasa a las variables correspontientes
                 password = passwordET.getText().toString(); // Password
+                passwordRep = passwordRepET.getText().toString(); // Password
                 usuario = usernameET.getText().toString(); // Username
+                email = emailET.getText().toString(); // Email
 
                 // Verifica que los campos no se dejen vacios
-                if(usuario.equals("") || password.equals("")){
+                if(usuario.equals("") || password.equals("") || passwordRep.equals("") ||
+                        email.equals("")){
                     Toast.makeText(getApplicationContext(),
                             "Porfavor llena todos los campos", Toast.LENGTH_LONG).show();
+                } else if (!password.equals(passwordRep)) {
+                    Toast.makeText(getApplicationContext(),
+                            "Contraseñas diferentes", Toast.LENGTH_LONG).show();
                 } else {
                     // Se crea un nuevo usuario y se guarda su informacion
                     ParseUser user = new ParseUser();
                     user.setUsername(usuario); // UserName
                     user.setPassword(password); // Password
+                    user.setEmail(email);
 
                     /* Conecta al ausuario a la aplicacion mientras despliega un mensaje de exito
                      * o de error
@@ -82,6 +98,7 @@ public class SignupActivity extends ActionBarActivity {
                             }
                         }
                     });
+                    finish();
                 }
             }
 

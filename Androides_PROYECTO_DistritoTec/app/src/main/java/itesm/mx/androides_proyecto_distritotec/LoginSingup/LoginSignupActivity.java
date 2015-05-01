@@ -11,10 +11,9 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
+
 import itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte.OpcionTransporte;
 import itesm.mx.androides_proyecto_distritotec.R;
-import itesm.mx.androides_proyecto_distritotec.SignupActivity;
 
 /**
  * LoginSingupActivity
@@ -33,6 +32,7 @@ public class LoginSignupActivity extends ActionBarActivity {
 
     Button btnLogin; // Boton Login
     Button btnSignup; // Boton Singup
+    Button btnForgot; // Boton Forgot Password
     EditText etPassword; // EditText Password
     EditText etUsername; // EditText Username
     String strUsername; // String que guarda el nombre del usuario
@@ -54,9 +54,9 @@ public class LoginSignupActivity extends ActionBarActivity {
         /* Se asignan los views a su variable correspontiendte */
         btnLogin = (Button)findViewById(R.id.btnLogin); // Boton Login
         btnSignup = (Button)findViewById(R.id.btnSignup); // Boton Singup
+        btnForgot = (Button)findViewById(R.id.btnForgot); // Boton Singup
         etUsername = (EditText)findViewById(R.id.etUserName); // EditText UserName
         etPassword = (EditText)findViewById(R.id.etPassword); // EditText Password
-
 
         getSupportActionBar().hide(); // Esconde el SupportActionBar
 
@@ -115,8 +115,6 @@ public class LoginSignupActivity extends ActionBarActivity {
             }
         });
 
-
-
         // Metodo on ClickListener para el Boton Singup
         btnSignup.setOnClickListener(new View.OnClickListener() {
           @Override
@@ -126,7 +124,14 @@ public class LoginSignupActivity extends ActionBarActivity {
           }
         });
 
+        btnForgot.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                Intent ForgotIntent = new Intent(LoginSignupActivity.this, ForgotPassword.class);
+                startActivity(ForgotIntent);
+            }
+        });
 
     }
 

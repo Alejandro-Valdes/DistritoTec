@@ -28,13 +28,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginSingup.LoginSignupActivity" />
         <activity
             android:name=".MenuOpcionesTransporte.OpcionTransporte"
             android:launchMode="singleInstance" />
+        <activity android:name=".LoginSingup.LoginSignupActivity" />
         <activity android:name=".SideBar.Configuracion" />
         <activity android:name=".SideBar.Notificaciones" />
         <activity android:name=".SideBar.Informacion" />
+        <activity android:name=".LoginSingup.ForgotPassword"></activity>
+        <activity android:name=".LoginSingup.SignupActivity"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -56,12 +58,6 @@
             android:label="@string/title_activity_maps_activity_route">
             <meta-data android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
-        </activity>
-
-
-        <activity
-            android:name=".SignupActivity"
-            android:label="@string/title_activity_signup" >
         </activity>
 
     </application>
