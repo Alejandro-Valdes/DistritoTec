@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
                 "Guadalupe",
                 "Villas TEC",
                 "Colonia Roma",
-                "Garza Sada"
+                "Altavista"
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(

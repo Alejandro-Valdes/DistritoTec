@@ -87,40 +87,47 @@ public class LoginSignupActivity extends ActionBarActivity {
                     strPassword = etPassword.getText().toString(); // UserName
                     strUsername = etUsername.getText().toString(); // Password
 
-                    // Metodo logInInBackground para verificar los datos de ParseUser
-                    ParseUser.logInInBackground(strUsername, strPassword,
-                            // LLamada LogInCallback
-                            new LogInCallback() {
+                    if(strUsername.equals("") || strPassword.equals("")){
+                        Toast.makeText(getApplicationContext(), "Favor de llenar todos los campos",
+                                Toast.LENGTH_SHORT).show();
+                    }
 
-                                /**
-                                 * done
-                                 *
-                                 * Metodo que verifica si los datos de usuario son correctos y en caso
-                                 * de serlo lo deja accesar a la actividad OpcionTransporte de lo
-                                 * contrario le pedira que cheque su informacion o que se registre.
-                                 *
-                                 * @Param parseUser de tipo <code>ParseUser</code> guarda la informaicon
-                                 * del usuario
-                                 * @Param e de tipo <code>ParseException</code> no se usa
-                                 * @return void
-                                 */
-                                @Override
-                                public void done(ParseUser parseUser, ParseException e) {
-                                    if(parseUser != null){
+                    else {
+                        // Metodo logInInBackground para verificar los datos de ParseUser
+                        ParseUser.logInInBackground(strUsername, strPassword,
+                                // LLamada LogInCallback
+                                new LogInCallback() {
 
-                                        Intent intent = new Intent(LoginSignupActivity.this,
-                                                OpcionTransporte.class);
-                                        startActivity(intent); // Llama a la actividad OpcionTransporte
+                                    /**
+                                     * done
+                                     * <p/>
+                                     * Metodo que verifica si los datos de usuario son correctos y en caso
+                                     * de serlo lo deja accesar a la actividad OpcionTransporte de lo
+                                     * contrario le pedira que cheque su informacion o que se registre.
+                                     *
+                                     * @return void
+                                     * @Param parseUser de tipo <code>ParseUser</code> guarda la informaicon
+                                     * del usuario
+                                     * @Param e de tipo <code>ParseException</code> no se usa
+                                     */
+                                    @Override
+                                    public void done(ParseUser parseUser, ParseException e) {
+                                        if (parseUser != null) {
 
-                                        Toast.makeText(getApplicationContext(),"Conectado",
-                                                Toast.LENGTH_SHORT).show();
-                                        finish(); // Termina la actividad
-                                    } else {
-                                        Toast.makeText(getApplicationContext(),"Verifica tu informacion,"
-                                                +" o registrate", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(LoginSignupActivity.this,
+                                                    OpcionTransporte.class);
+                                            startActivity(intent); // Llama a la actividad OpcionTransporte
+
+                                            Toast.makeText(getApplicationContext(), "Conectado",
+                                                    Toast.LENGTH_SHORT).show();
+                                            finish(); // Termina la actividad
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Verifica tu informacion,"
+                                                    + " o registrate", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            });
+                                });
+                    }
                 } else {
                     Toast.makeText(LoginSignupActivity.this,
                             "Verifique conexion a internet", Toast.LENGTH_SHORT).show();

@@ -60,6 +60,15 @@ public class Location extends ActionBarActivity  implements
             case "Valle":
                 ExpresoLocation.setObjectId("VJhJgBjYF5");
                 break;
+            case "Colonia Roma":
+                ExpresoLocation.setObjectId("3L93E77fHG");
+                break;
+            case "Villas TEC":
+                ExpresoLocation.setObjectId("ZLvqqzD67y");
+                break;
+            case "Altavista":
+                ExpresoLocation.setObjectId("ZpD2sGQYIr");
+                break;
             default:
                 ExpresoLocation.setObjectId("VJhJgBjYF5");
                 break;

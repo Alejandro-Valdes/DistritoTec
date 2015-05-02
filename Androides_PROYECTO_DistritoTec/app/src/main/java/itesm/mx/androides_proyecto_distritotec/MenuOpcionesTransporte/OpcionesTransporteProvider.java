@@ -39,7 +39,7 @@ public class OpcionesTransporteProvider {
         List<String> liCircuito = new ArrayList<String>();
         liCircuito.add("Villas TEC");
         liCircuito.add("Colonia Roma");
-        liCircuito.add("Garza Sada");
+        liCircuito.add("Altavista");
 
         // Nombre de las listas padres
         hmOpcionesTransporte.put("   Circuito", liCircuito);

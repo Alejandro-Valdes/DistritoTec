@@ -137,6 +137,7 @@ public class OpcionTransporte extends ActionBarActivity {
                 intentMap.putExtra("routeName",
                         parent.getExpandableListAdapter()
                                 .getChild(groupPosition, childPosition).toString());
+                intentMap.putExtra("idParent", groupPosition);
 
                 if(isConnected) {
                     startActivity(intentMap);
@@ -433,7 +434,6 @@ public class OpcionTransporte extends ActionBarActivity {
                 Toast.makeText(OpcionTransporte.this, strRouteName +
                         " a sido agregado a favoritos", Toast.LENGTH_SHORT).show();
                 updateDB();
-                /*https://github.com/commonsguy/cw-android/blob/master/Database/Constants/src/com/commonsware/android/constants/ConstantsBrowser.java*/
             }
             else {
                 Toast.makeText(OpcionTransporte.this, strRouteName +

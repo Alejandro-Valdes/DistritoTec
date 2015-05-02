@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.GetCallback;
 import com.parse.ParseObject;
@@ -76,6 +78,7 @@ public class MapsActivityRoute extends FragmentActivity implements
     boolean bGo = true;
 
     String strRouteName;
+    int iParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,7 @@ public class MapsActivityRoute extends FragmentActivity implements
         Bundle bundle = getIntent().getExtras();
 
         strRouteName = bundle.getString("routeName").trim();
+        iParent = bundle.getInt("idParent");
 
         Toast.makeText(getApplicationContext(),
                 "Ruta " + strRouteName,Toast.LENGTH_SHORT).show();
@@ -102,9 +106,19 @@ public class MapsActivityRoute extends FragmentActivity implements
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(ITESM, 14));
 
         if(map!=null){
+
+            // Initializing
+            markerPoints = new ArrayList<LatLng>();
+
             // Enable MyLocation Button in the Map
             map.setMyLocationEnabled(true);
-            setMap(strRouteName);
+
+
+            if(iParent == 0 || strRouteName.equals("Valle") || strRouteName.equals("Galerias") ||
+                    strRouteName.equals("San Nicolas") || strRouteName.equals("Guadalupe"))
+                setMapExpreso(strRouteName);
+            else
+                setMapCircuito(strRouteName);
         }
 
 
@@ -161,10 +175,60 @@ public class MapsActivityRoute extends FragmentActivity implements
         });
     }
 
-    public void setMap (String strName){
+    public void setMapCircuito (String strName) {
 
-        // Initializing
-        markerPoints = new ArrayList<LatLng>();
+        if(strName.equals("Colonia Roma")){
+            ExpresoLocation.setObjectId("3L93E77fHG");
+            Polygon polygon = map.addPolygon(new PolygonOptions().add(new LatLng(25.647936,-100.290070),
+                    new LatLng(25.642926,-100.301721),
+                    new LatLng(25.653797,-100.303695),
+                    new LatLng(25.659581,-100.297601)).strokeColor(Color.GREEN));
+            polygon.setFillColor(0x4000FF00);
+        }
+
+        else if (strName.equals("Villas TEC")){
+            ExpresoLocation.setObjectId("ZLvqqzD67y");
+            Polygon polygon = map.addPolygon(new PolygonOptions().add(new LatLng(25.647936, -100.290070),
+
+                    new LatLng(25.663507, -100.297108),
+                    new LatLng(25.660064, -100.283031),
+                    new LatLng(25.650799, -100.275650),
+                    new LatLng(25.647936, -100.279598),
+            new LatLng(25.652966, -100.284126)).strokeColor(Color.BLUE));
+            polygon.setFillColor(0x400000FF);
+        }
+
+        else if (strName.equals("Altavista")){
+            ExpresoLocation.setObjectId("ZpD2sGQYIr");
+
+            Polygon polygon = map.addPolygon(new PolygonOptions().add(new LatLng(25.652966, -100.284126),
+
+                    new LatLng(25.646989, -100.278718),
+                    new LatLng(25.650064, -100.275135),
+                    new LatLng(25.643449, -100.274427),
+                    new LatLng(25.635034, -100.291100),
+                    new LatLng(25.637549, -100.296185),
+            new LatLng(25.644281, -100.297065)).strokeColor(Color.RED));
+            polygon.setFillColor(0x40FF0000);
+        }
+
+        else {
+            //Villas TEC
+            ExpresoLocation.setObjectId("ZLvqqzD67y");
+            Polygon polygon = map.addPolygon(new PolygonOptions().add(new LatLng(25.647936, -100.290070),
+
+                    new LatLng(25.663507, -100.297108),
+                    new LatLng(25.660064, -100.283031),
+                    new LatLng(25.650799, -100.275650),
+                    new LatLng(25.647936, -100.279598),
+                    new LatLng(25.652966, -100.284126)).strokeColor(Color.BLUE));
+            polygon.setFillColor(0x400000FF);
+        }
+
+    }
+
+    public void setMapExpreso (String strName){
+
 
         switch (strName) {
             case "Valle":
