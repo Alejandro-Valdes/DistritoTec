@@ -1,6 +1,9 @@
 package itesm.mx.androides_proyecto_distritotec.LoginSingup;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
@@ -72,46 +75,56 @@ public class LoginSignupActivity extends ActionBarActivity {
              */
             @Override
             public void onClick(View v) {
+                Context context = getApplicationContext();
+                ConnectivityManager cm =
+                        (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-                // El input del usuario de pasa a las variables correspontientes
-                strPassword = etPassword.getText().toString(); // UserName
-                strUsername = etUsername.getText().toString(); // Password
+                if(isConnected) {
+                    // El input del usuario de pasa a las variables correspontientes
+                    strPassword = etPassword.getText().toString(); // UserName
+                    strUsername = etUsername.getText().toString(); // Password
 
-                // Metodo logInInBackground para verificar los datos de ParseUser
-                ParseUser.logInInBackground(strUsername, strPassword,
-                        // LLamada LogInCallback
-                        new LogInCallback() {
+                    // Metodo logInInBackground para verificar los datos de ParseUser
+                    ParseUser.logInInBackground(strUsername, strPassword,
+                            // LLamada LogInCallback
+                            new LogInCallback() {
 
-                            /**
-                             * done
-                             *
-                             * Metodo que verifica si los datos de usuario son correctos y en caso
-                             * de serlo lo deja accesar a la actividad OpcionTransporte de lo
-                             * contrario le pedira que cheque su informacion o que se registre.
-                             *
-                             * @Param parseUser de tipo <code>ParseUser</code> guarda la informaicon
-                             * del usuario
-                             * @Param e de tipo <code>ParseException</code> no se usa
-                             * @return void
-                             */
-                            @Override
-                            public void done(ParseUser parseUser, ParseException e) {
-                                if(parseUser != null){
+                                /**
+                                 * done
+                                 *
+                                 * Metodo que verifica si los datos de usuario son correctos y en caso
+                                 * de serlo lo deja accesar a la actividad OpcionTransporte de lo
+                                 * contrario le pedira que cheque su informacion o que se registre.
+                                 *
+                                 * @Param parseUser de tipo <code>ParseUser</code> guarda la informaicon
+                                 * del usuario
+                                 * @Param e de tipo <code>ParseException</code> no se usa
+                                 * @return void
+                                 */
+                                @Override
+                                public void done(ParseUser parseUser, ParseException e) {
+                                    if(parseUser != null){
 
-                                    Intent intent = new Intent(LoginSignupActivity.this,
-                                            OpcionTransporte.class);
-                                    startActivity(intent); // Llama a la actividad OpcionTransporte
+                                        Intent intent = new Intent(LoginSignupActivity.this,
+                                                OpcionTransporte.class);
+                                        startActivity(intent); // Llama a la actividad OpcionTransporte
 
-                                    Toast.makeText(getApplicationContext(),"Conectado",
-                                            Toast.LENGTH_SHORT).show();
-                                    finish(); // Termina la actividad
-                                } else {
-                                    Toast.makeText(getApplicationContext(),"Verifica tu informacion,"
-                                                    +" o registrate", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),"Conectado",
+                                                Toast.LENGTH_SHORT).show();
+                                        finish(); // Termina la actividad
+                                    } else {
+                                        Toast.makeText(getApplicationContext(),"Verifica tu informacion,"
+                                                +" o registrate", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                } else {
+                    Toast.makeText(LoginSignupActivity.this,
+                            "Verifique conexion a internet", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

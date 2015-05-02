@@ -1,6 +1,9 @@
 package itesm.mx.androides_proyecto_distritotec.LoginSingup;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -34,8 +37,21 @@ public class ForgotPassword extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
+                Context context = getApplicationContext();
+                ConnectivityManager cm =
+                        (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
                 email = emailET.getText().toString();
-                forgotPassword(email);
+
+                if(isConnected) {
+                    forgotPassword(email);
+                } else {
+                    Toast.makeText(ForgotPassword.this,
+                            "Verifique conexion a internet", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

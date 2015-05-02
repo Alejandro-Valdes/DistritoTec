@@ -1,8 +1,11 @@
 package itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -124,11 +127,23 @@ public class OpcionTransporte extends ActionBarActivity {
                                         int groupPosition, int childPosition, long id) {
                 Intent intentMap = new Intent(OpcionTransporte.this, MapsActivityRoute.class);
 
+                Context context = getApplicationContext();
+                ConnectivityManager cm =
+                        (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
                 intentMap.putExtra("routeName",
                         parent.getExpandableListAdapter()
                                 .getChild(groupPosition, childPosition).toString());
 
-                startActivity(intentMap);
+                if(isConnected) {
+                    startActivity(intentMap);
+                } else {
+                    Toast.makeText(OpcionTransporte.this,
+                            "Verifique conexion a internet", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
         });

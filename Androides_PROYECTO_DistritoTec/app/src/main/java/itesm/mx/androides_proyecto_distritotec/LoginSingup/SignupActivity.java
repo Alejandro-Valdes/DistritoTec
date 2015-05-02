@@ -1,5 +1,8 @@
 package itesm.mx.androides_proyecto_distritotec.LoginSingup;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -58,6 +61,13 @@ public class SignupActivity extends ActionBarActivity {
                 usuario = usernameET.getText().toString(); // Username
                 email = emailET.getText().toString(); // Email
 
+                Context context = getApplicationContext();
+                ConnectivityManager cm =
+                        (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
                 // Verifica que los campos no se dejen vacios
                 if(usuario.equals("") || password.equals("") || passwordRep.equals("") ||
                         email.equals("")){
@@ -76,29 +86,36 @@ public class SignupActivity extends ActionBarActivity {
                     /* Conecta al ausuario a la aplicacion mientras despliega un mensaje de exito
                      * o de error
                      */
-                    user.signUpInBackground(new SignUpCallback() {
 
-                        /**
-                         * done
-                         *
-                         * Metodo que verifica si hubo error a la hora de crear el usuario
-                         *
-                         * @Param e de tipo <code>ParseException</code> si no hay exception marca
-                         * registro exitoso de lo contrario marca error.
-                         * @return void
-                         */
-                        @Override
-                        public void done(ParseException e) {
-                            if(e == null){
-                                Toast.makeText(getApplicationContext(),"Registro exitoso!",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(),"Hubo un error, " +
-                                        "intenta de nuevo", Toast.LENGTH_LONG).show();
+                    if(isConnected) {
+                        user.signUpInBackground(new SignUpCallback() {
+
+                            /**
+                             * done
+                             *
+                             * Metodo que verifica si hubo error a la hora de crear el usuario
+                             *
+                             * @Param e de tipo <code>ParseException</code> si no hay exception marca
+                             * registro exitoso de lo contrario marca error.
+                             * @return void
+                             */
+                            @Override
+                            public void done(ParseException e) {
+                                if(e == null){
+                                    Toast.makeText(getApplicationContext(),"Registro exitoso!",
+                                            Toast.LENGTH_LONG).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(getApplicationContext(),"Hubo un error, " +
+                                            "intenta de nuevo", Toast.LENGTH_LONG).show();
+                                }
                             }
-                        }
-                    });
-                    finish();
+                        });
+                    } else {
+                        Toast.makeText(SignupActivity.this,
+                                "Verifique conexion a internet", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
 
