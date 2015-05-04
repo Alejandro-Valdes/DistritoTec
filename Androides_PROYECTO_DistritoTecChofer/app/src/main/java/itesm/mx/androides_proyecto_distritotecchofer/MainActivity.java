@@ -19,6 +19,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.onResume();
+
         setContentView(R.layout.activity_main);
 
         lvRutas = (ListView) findViewById(R.id.lvRutas);

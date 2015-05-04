@@ -24,6 +24,9 @@ public class Location extends ActionBarActivity  implements
 
     GoogleApiClient mGoogleApiClient;
 
+    LocationListener locationListener;
+    LocationManager locationManager;
+
     ParseObject ExpresoLocation = new ParseObject("Routes");
     ParseQuery<ParseObject> query = ParseQuery.getQuery("Routes");
 
@@ -64,7 +67,7 @@ public class Location extends ActionBarActivity  implements
                 ExpresoLocation.setObjectId("3L93E77fHG");
                 break;
             case "Villas TEC":
-                ExpresoLocation.setObjectId("ZLvqqzD67y");
+                ExpresoLocation.setObjectId("Qr6lDLZI3d");
                 break;
             case "Altavista":
                 ExpresoLocation.setObjectId("ZpD2sGQYIr");
@@ -103,9 +106,9 @@ public class Location extends ActionBarActivity  implements
             Thread.currentThread().interrupt();
         }
 
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
+        locationListener = new LocationListener() {
 
             public void onLocationChanged(android.location.Location location) {
                 Double templon = location.getLongitude();
@@ -115,12 +118,8 @@ public class Location extends ActionBarActivity  implements
 
                 ExpresoLocation.put("longitud", auxlon);
                 ExpresoLocation.put("latitud", auxlat);
-                try {
-                    ExpresoLocation.save();
-                    Toast.makeText(getApplicationContext(), auxlon + " " + auxlat, Toast.LENGTH_SHORT).show();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+
+                ExpresoLocation.saveEventually();
 
                 tvLong.setText(ExpresoLocation.getString("longitud"));
                 tvLat.setText(ExpresoLocation.getString("latitud"));
@@ -134,7 +133,9 @@ public class Location extends ActionBarActivity  implements
         };
 
         // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 1, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1,0, locationListener);
+
     }
 
     @Override
@@ -144,4 +145,16 @@ public class Location extends ActionBarActivity  implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
     }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        if(locationManager != null && locationListener != null)
+        {
+            locationManager.removeUpdates(locationListener);
+        }
+
+
+    }
+
 }

@@ -161,10 +161,9 @@ public class LoginSignupActivity extends ActionBarActivity {
         if ((keyCode == KeyEvent.KEYCODE_BACK))
         {
             finish();
-            return false; //I have tried here true also
+            return false;
         }
         return super.onKeyDown(keyCode, event);
-
     }
 }
 
