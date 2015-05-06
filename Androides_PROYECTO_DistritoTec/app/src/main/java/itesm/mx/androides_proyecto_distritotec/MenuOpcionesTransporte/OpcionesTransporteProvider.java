@@ -2,6 +2,7 @@ package itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class OpcionesTransporteProvider {
      */
     public static HashMap<String, List<String >> getInfo(List<String> liFavs){
 
-        HashMap<String, List<String>> hmOpcionesTransporte = new HashMap<String, List<String>>();
+        LinkedHashMap<String, List<String>> hmOpcionesTransporte = new LinkedHashMap<String, List<String>>();
 
         // Lista del Expreso TEC
         List<String> liExpreso = new ArrayList<String>();

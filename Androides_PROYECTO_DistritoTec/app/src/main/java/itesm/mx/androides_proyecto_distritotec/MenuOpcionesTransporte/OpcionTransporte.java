@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -61,7 +62,7 @@ public class OpcionTransporte extends ActionBarActivity {
     /**
      * Lista Expandible
      */
-    HashMap<String, List<String>> hmOpcionesTransporte;     // HashMap <nombre, List>
+    LinkedHashMap<String, List<String>> hmOpcionesTransporte;     // HashMap <nombre, List>
     List<String> liOpciones; // Opciones Padre: Expreso, Circuito
     ExpandableListView expList; // Lista expandible
     OpcionesTransporteAdapter adapter; // Adaptador para los items de la lista expandible
@@ -453,7 +454,7 @@ public class OpcionTransporte extends ActionBarActivity {
         liRoutesStr = dao.getAllRoutesStr();
 
         // Obtengo la info que ira en la lista expandible
-        hmOpcionesTransporte = OpcionesTransporteProvider.getInfo(liRoutesStr);
+        hmOpcionesTransporte = (LinkedHashMap<String, List<String>>) OpcionesTransporteProvider.getInfo(liRoutesStr);
 
         // Creo lista de los padres de la lista expnadible
         liOpciones = new ArrayList<>(hmOpcionesTransporte.keySet());
