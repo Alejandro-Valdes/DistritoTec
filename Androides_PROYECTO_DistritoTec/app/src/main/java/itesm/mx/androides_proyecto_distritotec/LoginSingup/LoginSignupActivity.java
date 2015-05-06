@@ -26,7 +26,6 @@ import itesm.mx.androides_proyecto_distritotec.R;
  * @author Jose Eduardo Elizondo Lozano A01089591
  * @author Oliver Alejandro Martínez Quiroz A01280416
  * @author Jesús Alejandro Valdés Valdés A0099044
- *
  * Version 1.0
  *
  */
@@ -144,6 +143,7 @@ public class LoginSignupActivity extends ActionBarActivity {
           }
         });
 
+        // Método on ClickListener para el boton de Forgot Password
         btnForgot.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -155,6 +155,15 @@ public class LoginSignupActivity extends ActionBarActivity {
 
     }
 
+    /**
+     * onKeyDown
+     *
+     * Método que checa si el usuario acciono el botón back
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {

@@ -4,7 +4,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import itesm.mx.androides_proyecto_distritotec.R;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,16 +14,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.LogRecord;
-
 import org.json.JSONObject;
-
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -41,6 +37,18 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.GetCallback;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+/**
+ * MapsActivityRoute
+ *
+ * Clase que se encarga de la localizacion en tiempo real, pone la localizacion del camion con
+ * un marker color azul. Tiene las cordeandas de las rutas a desplegar en el mapa
+ *
+ * @author José Eduardo Elizondo Lozano A01089591
+ * @author Jesús Alejandro Valdés Valdés A0099044
+ * @author Oliver Alejandro Martínez Quiroz A01280416
+ * @version 1.0
+ */
 
 public class MapsActivityRoute extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -139,6 +147,12 @@ public class MapsActivityRoute extends FragmentActivity implements
 
     }
 
+    /**
+     * updateStatus
+     *
+     * Método que actualiza la posición del camión en el mapa, obtiene los datos de la base de
+     * datos en parse
+     */
     private void updateStatus() {
         if(mCamion != null){
             bGo = false;
@@ -150,7 +164,7 @@ public class MapsActivityRoute extends FragmentActivity implements
             @Override
             public void done(ParseObject parseObject, com.parse.ParseException e) {
                 if (e == null) {
-
+                    // Saca la latitud y longitud de la base de datos
                     String strLat = parseObject.getString("latitud");
                     String strLong = parseObject.getString("longitud");
                     dLat = Double.parseDouble(strLat);
@@ -165,7 +179,7 @@ public class MapsActivityRoute extends FragmentActivity implements
 
                     latLngCamion = new LatLng(dLat, dLong);
 
-
+                    // Agrega el marker al mapa en la posición en la que se encuentra el camión
                     mCamion = map.addMarker(options.position(latLngCamion).icon(BitmapDescriptorFactory
                             .fromResource(R.drawable.transport)));
 
@@ -175,8 +189,16 @@ public class MapsActivityRoute extends FragmentActivity implements
         });
     }
 
+    /**
+     * setMapCircuito
+     *
+     * Metodo que tiene las cordenadas que dibujan la ruta en el mapa del circuito TEC
+     *
+     * @param strName
+     */
     public void setMapCircuito (String strName) {
 
+        // Colonia Roma
         if(strName.equals("Colonia Roma")){
             ExpresoLocation.setObjectId("3L93E77fHG");
             Polygon polygon = map.addPolygon(new PolygonOptions().add(new LatLng(25.647936,-100.290070),
@@ -186,6 +208,7 @@ public class MapsActivityRoute extends FragmentActivity implements
             polygon.setFillColor(0x4000FF00);
         }
 
+        // Villas TEC
         else if (strName.equals("Villas TEC")){
             ExpresoLocation.setObjectId("Qr6lDLZI3d");
             Polygon polygon = map.addPolygon(new PolygonOptions().add(new LatLng(25.647936, -100.290070),
@@ -198,6 +221,7 @@ public class MapsActivityRoute extends FragmentActivity implements
             polygon.setFillColor(0x400000FF);
         }
 
+        // Altavista
         else if (strName.equals("Altavista")){
             ExpresoLocation.setObjectId("ZpD2sGQYIr");
 
@@ -227,8 +251,14 @@ public class MapsActivityRoute extends FragmentActivity implements
 
     }
 
+    /**
+     * setMapExpreso
+     *
+     * Metodo que tiene las cordenadas que dibujan la ruta en el mapa del expreso TEC
+     *
+     * @param strName
+     */
     public void setMapExpreso (String strName){
-
 
         switch (strName) {
             case "Valle":
@@ -283,7 +313,7 @@ public class MapsActivityRoute extends FragmentActivity implements
                 waypoint8 = new LatLng(25.657256, -100.280564);
                 break;
 
-            //la del valle
+            // Valle
             default:
                 ExpresoLocation.setObjectId("VJhJgBjYF5");
                 initialPos = new LatLng(25.655767,-100.385106);
@@ -298,10 +328,11 @@ public class MapsActivityRoute extends FragmentActivity implements
                 break;
         }
 
+        // Marker que indica la posicion inicial (Marker verde)
         markerPoints.add(initialPos);
         map.addMarker(options.position(initialPos).icon(BitmapDescriptorFactory.
                 defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-
+        // Marker que indica la posición del tec (Marker rojo)
         markerPoints.add(ITESM);
         map.addMarker(options.position(ITESM).icon(BitmapDescriptorFactory.
                 defaultMarker(BitmapDescriptorFactory.HUE_RED)));
@@ -315,11 +346,9 @@ public class MapsActivityRoute extends FragmentActivity implements
         markerPoints.add(waypoint7);
         markerPoints.add(waypoint8);
 
-
         String url = getDirectionsUrl(markerPoints.get(0), markerPoints.get(1));
 
         DownloadTask downloadTask = new DownloadTask();
-
         downloadTask.execute(url);
 
     }
@@ -332,17 +361,31 @@ public class MapsActivityRoute extends FragmentActivity implements
                 .build();
     }
 
-
+    /**
+     * onConnected
+     *
+     * @param bundle
+     */
     @Override
     public void onConnected(Bundle bundle) {
 
     }
 
+    /**
+     * onConnectionSuspended
+     *
+     * @param i
+     */
     @Override
     public void onConnectionSuspended(int i) {
 
     }
 
+    /**
+     * onConnectionFailed
+     *
+     * @param connectionResult
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
@@ -350,16 +393,16 @@ public class MapsActivityRoute extends FragmentActivity implements
 
     private String getDirectionsUrl(LatLng origin,LatLng dest){
 
-        // Origin of route
+        // Ruta origen
         String str_origin = "origin="+origin.latitude+","+origin.longitude;
 
-        // Destination of route
+        // Ruta destino
         String str_dest = "destination="+dest.latitude+","+dest.longitude;
 
-        // Sensor enabled
+        // Sensor habilitado
         String sensor = "sensor=false";
 
-        // Building the parameters to the web service
+        // Parametros del web service
         String waypoints = "waypoints="+
                 waypoint1.latitude+","+waypoint1.longitude+"|"+
                 waypoint2.latitude+","+waypoint2.longitude+"|"+
@@ -372,16 +415,16 @@ public class MapsActivityRoute extends FragmentActivity implements
 
                 String parameters = str_origin +"&"+str_dest+"&"+waypoints+"&"+sensor;
 
-        // Output format
+        // Fortmato de salida
         String output = "json";
 
-        // Building the url to the web service
+        // Url del web service
         String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
 
         System.out.println(url);
         return url;
     }
-    /** A method to download json data from url */
+    /** Metodo para descargar json del url */
     private String downloadUrl(String strUrl) throws IOException{
         String data = "";
         InputStream iStream = null;
@@ -389,15 +432,16 @@ public class MapsActivityRoute extends FragmentActivity implements
         try{
             URL url = new URL(strUrl);
 
-            // Creating an http connection to communicate with url
+            // Creación de conexión http con el url
             urlConnection = (HttpURLConnection) url.openConnection();
 
-            // Connecting to url
+            // Conexión al url
             urlConnection.connect();
 
-            // Reading data from url
+            // Leer info del url
             iStream = urlConnection.getInputStream();
 
+            // Lee el contenido
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
 
             StringBuffer sb = new StringBuffer();
@@ -421,18 +465,18 @@ public class MapsActivityRoute extends FragmentActivity implements
     }
 
 
-    // Fetches data from url passed
+    // Trae información del url que se le pasa
     private class DownloadTask extends AsyncTask<String, Void, String>{
 
-        // Downloading data in non-ui thread
+        // Descarga la información en el background
         @Override
         protected String doInBackground(String... url) {
 
-            // For storing data from web service
+            // Guarda información del web service
             String data = "";
 
             try{
-                // Fetching the data from web service
+                // Trae información del web service
                 data = downloadUrl(url[0]);
             }catch(Exception e){
                 Log.d("Background Task",e.toString());
@@ -440,23 +484,22 @@ public class MapsActivityRoute extends FragmentActivity implements
             return data;
         }
 
-        // Executes in UI thread, after the execution of
-        // doInBackground()
+        // Ejecuta un thread de UI despues de hacerlo en el background
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
             ParserTask parserTask = new ParserTask();
 
-            // Invokes the thread for parsing the JSON data
+            // Invoca el thread que parsea la información JSON
             parserTask.execute(result);
         }
     }
 
-    /** A class to parse the Google Places in JSON format */
+    /** Clase que parsea Google Places a JSON */
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> >{
 
-        // Parsing the data in non-ui thread
+        // Parseo de la información
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
@@ -467,7 +510,7 @@ public class MapsActivityRoute extends FragmentActivity implements
                 jObject = new JSONObject(jsonData[0]);
                 DirectionsJSONParser parser = new DirectionsJSONParser();
 
-                // Starts parsing data
+                // Empieza a parsear la información
                 routes = parser.parse(jObject);
             }catch(Exception e){
                 e.printStackTrace();
@@ -475,22 +518,28 @@ public class MapsActivityRoute extends FragmentActivity implements
             return routes;
         }
 
-        // Executes in UI thread, after the parsing process
+        /**
+         * onPostExecute
+         *
+         * Ejecuta el UI thread, después de parsear la información
+         *
+         * @param result
+         */
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points = null;
             PolylineOptions lineOptions = null;
             MarkerOptions markerOptions = new MarkerOptions();
 
-            // Traversing through all the routes
+            // Pasa a traves de todas las rutas
             for(int i=0;i<result.size();i++){
                 points = new ArrayList<LatLng>();
                 lineOptions = new PolylineOptions();
 
-                // Fetching i-th route
+                // Saca la ruta i
                 List<HashMap<String, String>> path = result.get(i);
 
-                // Fetching all the points in i-th route
+                // Saca los puntos de la ruta i
                 for(int j=0;j<path.size();j++){
                     HashMap<String,String> point = path.get(j);
 
@@ -501,13 +550,13 @@ public class MapsActivityRoute extends FragmentActivity implements
                     points.add(position);
                 }
 
-                // Adding all the points in the route to LineOptions
+                // Une todos los puntos en el mapa
                 lineOptions.addAll(points);
                 lineOptions.width(6);
                 lineOptions.color(Color.RED);
             }
 
-            // Drawing polyline in the Google Map for the i-th route
+            // Dibuja la linea que represena la ruta
             map.addPolyline(lineOptions);
         }
     }

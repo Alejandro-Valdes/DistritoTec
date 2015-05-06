@@ -11,6 +11,18 @@ import android.widget.TextView;
 import itesm.mx.androides_proyecto_distritotec.R;
 import java.util.ArrayList;
 
+/**
+ * NavDrawerListAdapter
+ *
+ * Clase que pone los items en la side bar
+ *
+ * @author Jose Eduardo Elizondo Lozano A01089591
+ * @author Oliver Alejandro Martínez Quiroz A01280416
+ * @author Jesús Alejandro Valdés Valdés A0099044
+ *
+ * Version 1.0
+ *
+ */
 
 public class NavDrawerListAdapter extends BaseAdapter {
 
@@ -22,21 +34,54 @@ public class NavDrawerListAdapter extends BaseAdapter {
         this.navDrawerItems = navDrawerItems;
     }
 
+    /**
+     * getCount
+     *
+     * Cantidad de items
+     *
+     * @return
+     */
     @Override
     public int getCount() {
         return navDrawerItems.size();
     }
 
+    /**
+     * getItem
+     *
+     * Saca el item selecionado
+     *
+     * @param position
+     * @return
+     */
     @Override
     public Object getItem(int position) {
         return navDrawerItems.get(position);
     }
 
+    /**
+     * getItemId
+     *
+     * Item Id
+     *
+     * @param position
+     * @return
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * getView
+     *
+     * Vista de la side bar
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -52,12 +97,11 @@ public class NavDrawerListAdapter extends BaseAdapter {
         imgIcon.setImageResource(navDrawerItems.get(position).getIcon());
         txtTitle.setText(navDrawerItems.get(position).getTitle());
 
-        // displaying count
-        // check whether it set visible or not
+        // Checa si es visible o no
         if(navDrawerItems.get(position).getCounterVisibility()){
             txtCount.setText(navDrawerItems.get(position).getCount());
         }else{
-            // hide the counter view
+            // Esconde el contador
             txtCount.setVisibility(View.GONE);
         }
 

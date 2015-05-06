@@ -18,18 +18,28 @@ import com.parse.SignUpCallback;
 
 import itesm.mx.androides_proyecto_distritotec.R;
 
+/**
+ * SingupActivity
+ *
+ * Clase que se encarga del registro del usuario
+ *
+ * @author José Eduardo Elizondo Lozano A01089591
+ * @author Jesús Alejandro Valdés Valdés A0099044
+ * @author Oliver Alejandro Martínez Quiroz A01280416
+ * @version 1.0
+ */
 
 public class SignupActivity extends ActionBarActivity {
 
-    EditText usernameET;
-    EditText passwordET;
-    EditText passwordRepET;
-    EditText emailET;
-    Button signupButton;
-    String password;
-    String passwordRep;
-    String email;
-    String usuario;
+    EditText usernameET; // Campo usuario
+    EditText passwordET; // Campo contraseña
+    EditText passwordRepET; // Campo repite contraseña
+    EditText emailET; // Campo email
+    Button signupButton; // boton Singup
+    String password; // Contraseña
+    String passwordRep; // Repite contraseña
+    String email; // Email
+    String usuario; // nombre usuario
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +96,7 @@ public class SignupActivity extends ActionBarActivity {
                     /* Conecta al ausuario a la aplicacion mientras despliega un mensaje de exito
                      * o de error
                      */
-
+                    // Checa si se tiene conexión a internet para mandar el registro
                     if(isConnected) {
                         user.signUpInBackground(new SignUpCallback() {
 
