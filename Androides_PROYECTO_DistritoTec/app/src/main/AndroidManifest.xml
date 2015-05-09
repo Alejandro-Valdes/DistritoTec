@@ -21,7 +21,8 @@
         android:windowSoftInputMode="adjustResize" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,13 +31,20 @@
         </activity>
         <activity
             android:name=".MenuOpcionesTransporte.OpcionTransporte"
-            android:launchMode="singleInstance" />
-        <activity android:name=".LoginSingup.LoginSignupActivity" />
-        <activity android:name=".SideBar.Configuracion" />
-        <activity android:name=".SideBar.Notificaciones" />
-        <activity android:name=".SideBar.Informacion" />
-        <activity android:name=".LoginSingup.ForgotPassword"></activity>
-        <activity android:name=".LoginSingup.SignupActivity"></activity>
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginSingup.LoginSignupActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SideBar.Configuracion"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SideBar.Notificaciones"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SideBar.Informacion"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginSingup.ForgotPassword"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".LoginSingup.SignupActivity"
+            android:screenOrientation="portrait"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -47,7 +55,8 @@
 
 
         <activity android:name="itesm.mx.androides_proyecto_distritotec.GoogleMaps.MapsActivityRoute"
-            android:label="@string/title_activity_maps_activity_route">
+            android:label="@string/title_activity_maps_activity_route"
+            android:screenOrientation="portrait">
             <meta-data android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
         </activity>
