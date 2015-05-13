@@ -11,4 +11,23 @@
         android:textSize="16dp"
         android:text="Informacion"/>
 
+
+    <TextView
+        android:id="@+id/tvTelefono"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="16dp"
+        android:text="@string/strTelefono"/>
+
+    <TextView
+        android:id="@+id/tvOficina"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="16dp"
+        android:text="@string/strOficina"/>
+
 </LinearLayout>

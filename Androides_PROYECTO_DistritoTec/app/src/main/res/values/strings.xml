@@ -49,5 +49,9 @@
     <string name="title_activity_signup">SignupActivity</string>
     <string name="strForgot">Forgot Password</string>
 
+    <!-- Informacion -->
+    <string name="strOficina">Oficina: Aulas III, Oficina 118-B</string>
+    <string name="strTelefono">Telefono: (52) 81-8358-2000 Ext. 3668 y 3682</string>
+
 
 </resources>
