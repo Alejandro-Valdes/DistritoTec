@@ -1,8 +1,11 @@
 package itesm.mx.androides_proyecto_distritotec.GoogleMaps;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.FragmentActivity;
 
 import itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte.OpcionTransporte;
@@ -16,6 +19,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.LogRecord;
 import org.json.JSONObject;
 import android.graphics.Color;
@@ -38,6 +46,7 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -57,16 +66,25 @@ public class MapsActivityRoute extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
+    //variables para verificar la conexion
+    ConnectivityManager cm;
+    NetworkInfo activeNetwork;
+    boolean isConnected;
+
+
+    //variables de objetos de parse
     GoogleApiClient mGoogleApiClient;
     ParseObject ExpresoLocation = new ParseObject("Routes");
     ParseQuery<ParseObject> query = ParseQuery.getQuery("Routes");
 
+    //variables para el mapa
     GoogleMap map;
     ArrayList<LatLng> markerPoints;
     MarkerOptions options = new MarkerOptions();
     LatLng ITESM = new LatLng(25.649713, -100.290032);
     LatLng initialPos = new LatLng(25.656848, -100.2826138);
 
+    //waypoints de nuestro mapa
     LatLng waypoint1;
     LatLng waypoint2;
     LatLng waypoint3;
@@ -95,6 +113,16 @@ public class MapsActivityRoute extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_activity_route);
+
+        // Codigo de inicializacion
+        Parse.initialize(this, "Pc66LZ9sLsdgr10KSJPD1qTwO74Ov6NWvDOTcYJb",
+                "huXDJ9jUWe0zP1dDOFMCByyUAZ5RflNR9mN1pGly");
+
+        //inicializo variables de conexion
+        cm =
+        (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null && activeNetwork.isConnected();
 
         Bundle bundle = getIntent().getExtras();
 
@@ -125,23 +153,36 @@ public class MapsActivityRoute extends FragmentActivity implements
             map.setMyLocationEnabled(true);
 
 
-            if(iParent == 0 || strRouteName.equals("Valle") || strRouteName.equals("Galerias") ||
-                    strRouteName.equals("San Nicolas") || strRouteName.equals("Guadalupe"))
-                setMapExpreso(strRouteName);
-            else
-                setMapCircuito(strRouteName);
+            if(isConnected) {
+                if (iParent == 0 || strRouteName.equals("Valle") || strRouteName.equals("Galerias") ||
+                        strRouteName.equals("San Nicolas") || strRouteName.equals("Guadalupe"))
+                    setMapExpreso(strRouteName);
+                else
+                    setMapCircuito(strRouteName);
+            }
+            else{
+                Intent intent = new Intent(MapsActivityRoute.this, OpcionTransporte.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(),"Verifique conexion a internet",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
 
 
     //QUE DEPENDA DEL CAMION
 
         hHandler = new Handler();
-
+        //runnable para estar actualizando la posicion del camion
         rRunnable = new Runnable(){
             @Override
             public void run() {
                 if(bGo)
-                    updateStatus();
+                    try {
+                        updateStatus();
+                        throw new RuntimeException("RuntimeException");
+                    } catch (Exception e) {
+                        System.out.println("I caught: " + e);
+                    }
                 hHandler.postDelayed(rRunnable, iTime);
             }
         };
@@ -157,22 +198,24 @@ public class MapsActivityRoute extends FragmentActivity implements
      * datos en parse
      */
     private void updateStatus() {
+
+        bGo = false; //variable para limitar las queries
+
         if(mCamion != null){
-            bGo = false;
-            mCamion.remove();
+            mCamion.remove(); //quita la instancia del camion pasada
         }
 
         query.getInBackground(ExpresoLocation.getObjectId(),new GetCallback<ParseObject>() {
 
             @Override
             public void done(ParseObject parseObject, com.parse.ParseException e) {
+
                 if (e == null) {
                     // Saca la latitud y longitud de la base de datos
                     String strLat = parseObject.getString("latitud");
                     String strLong = parseObject.getString("longitud");
                     dLat = Double.parseDouble(strLat);
                     dLong = Double.parseDouble(strLong);
-
 
                 } else {
                     e.printStackTrace();
@@ -352,13 +395,14 @@ public class MapsActivityRoute extends FragmentActivity implements
         String url = getDirectionsUrl(markerPoints.get(0), markerPoints.get(1));
 
         DownloadTask downloadTask = new DownloadTask();
-        downloadTask.execute(url);
+           downloadTask.execute(url);
 
     }
 
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        hHandler.removeCallbacks(rRunnable);
         Intent intent = new Intent(MapsActivityRoute.this, OpcionTransporte.class);
         startActivity(intent);
     }

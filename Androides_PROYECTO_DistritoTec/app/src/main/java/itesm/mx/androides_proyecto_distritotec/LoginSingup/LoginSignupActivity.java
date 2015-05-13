@@ -1,5 +1,6 @@
 package itesm.mx.androides_proyecto_distritotec.LoginSingup;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -92,6 +93,8 @@ public class LoginSignupActivity extends ActionBarActivity {
                     }
 
                     else {
+                        final ProgressDialog dialog = ProgressDialog.show(LoginSignupActivity.this,
+                                "Espere porfavor","Iniciando sesion",true,false);
                         // Metodo logInInBackground para verificar los datos de ParseUser
                         ParseUser.logInInBackground(strUsername, strPassword,
                                 // LLamada LogInCallback
@@ -111,6 +114,7 @@ public class LoginSignupActivity extends ActionBarActivity {
                                      */
                                     @Override
                                     public void done(ParseUser parseUser, ParseException e) {
+                                        dialog.dismiss();
                                         if (parseUser != null) {
 
                                             Intent intent = new Intent(LoginSignupActivity.this,

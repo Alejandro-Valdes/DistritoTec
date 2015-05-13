@@ -1,5 +1,6 @@
 package itesm.mx.androides_proyecto_distritotec.LoginSingup;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -98,6 +99,9 @@ public class SignupActivity extends ActionBarActivity {
                      */
                     // Checa si se tiene conexión a internet para mandar el registro
                     if(isConnected) {
+                        final ProgressDialog dialog = ProgressDialog.show(SignupActivity.this,
+                                "Espere porfavor","Registrando usuario",true,false);
+
                         user.signUpInBackground(new SignUpCallback() {
 
                             /**
@@ -111,6 +115,7 @@ public class SignupActivity extends ActionBarActivity {
                              */
                             @Override
                             public void done(ParseException e) {
+                                dialog.dismiss();
                                 if(e == null){
                                     Toast.makeText(getApplicationContext(),"Registro exitoso!",
                                             Toast.LENGTH_LONG).show();

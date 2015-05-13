@@ -19,6 +19,8 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.Parse;
 import com.parse.ParseUser;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -95,6 +97,10 @@ public class OpcionTransporte extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.opciontransporte);
+
+        // Codigo de inicializacion
+        Parse.initialize(this, "Pc66LZ9sLsdgr10KSJPD1qTwO74Ov6NWvDOTcYJb",
+                "huXDJ9jUWe0zP1dDOFMCByyUAZ5RflNR9mN1pGly");
 
         tvUser = (TextView) findViewById(R.id.tvUserName); // TextView Nombre Usuario
         tvWelcome = (TextView) findViewById(R.id.tvWelcome); // TextView Welcome
