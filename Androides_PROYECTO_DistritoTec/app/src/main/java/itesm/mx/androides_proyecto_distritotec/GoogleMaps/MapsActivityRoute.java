@@ -1,8 +1,11 @@
 package itesm.mx.androides_proyecto_distritotec.GoogleMaps;
 
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
+
+import itesm.mx.androides_proyecto_distritotec.MenuOpcionesTransporte.OpcionTransporte;
 import itesm.mx.androides_proyecto_distritotec.R;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -352,6 +355,16 @@ public class MapsActivityRoute extends FragmentActivity implements
         downloadTask.execute(url);
 
     }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent intent = new Intent(MapsActivityRoute.this, OpcionTransporte.class);
+        startActivity(intent);
+    }
+
+
+
 
     private void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)

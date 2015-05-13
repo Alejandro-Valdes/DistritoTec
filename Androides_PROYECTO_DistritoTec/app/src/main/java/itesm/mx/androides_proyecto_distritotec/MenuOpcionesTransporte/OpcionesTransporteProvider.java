@@ -25,7 +25,7 @@ public class OpcionesTransporteProvider {
      * @param liFavs
      * @return un valor <codeHashMap<String, List<String >></code> la lista de las rutas disponibles
      */
-    public static HashMap<String, List<String >> getInfo(List<String> liFavs){
+    public static LinkedHashMap<String, List<String >> getInfo(List<String> liFavs){
 
         LinkedHashMap<String, List<String>> hmOpcionesTransporte = new LinkedHashMap<String, List<String>>();
 
@@ -43,8 +43,8 @@ public class OpcionesTransporteProvider {
         liCircuito.add("Altavista");
 
         // Nombre de las listas padres
-        hmOpcionesTransporte.put("   Circuito", liCircuito);
         hmOpcionesTransporte.put("   Expreso", liExpreso);
+        hmOpcionesTransporte.put("   Circuito", liCircuito);
         hmOpcionesTransporte.put("   Favoritos", liFavs);
 
         return hmOpcionesTransporte;
